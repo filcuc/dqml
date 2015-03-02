@@ -20,7 +20,7 @@ void main()
     auto qmlApplicationEngine = new QQmlApplicationEngine;
     scope(exit) destroy(qmlApplicationEngine);
     qmlApplicationEngine.context().setContextProperty("myQObject", new QVariant(myQObject));
-    qmlApplicationEngine.load("main.qml");
+    qmlApplicationEngine.load("view/window.qml");
 
     app.exec();
   }
