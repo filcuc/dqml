@@ -4,3 +4,5 @@
 .dub/dub.json
 
 dub.selections.json
+
+*.sublime-project

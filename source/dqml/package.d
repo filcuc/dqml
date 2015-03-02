@@ -1,4 +1,4 @@
-module dqml.package;
+module dqml;
 
 public import dqml.qguiapplication;
 public import dqml.qobject;
