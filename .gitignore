@@ -12,3 +12,5 @@ dub.selections.json
 __test__library__
 
 *.dylib
+
+examples/simple/simple
