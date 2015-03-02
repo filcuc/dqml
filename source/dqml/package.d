@@ -1,8 +1,10 @@
-public import qvariant;
-public import qguiapplication;
-public import qqmlcontext;
-public import qobject;
-public import qslot;
-public import qsignal;
-public import qqmlapplicationengine;
-public import qquickview;
+module dqml.package;
+
+public import dqml.qguiapplication;
+public import dqml.qobject;
+public import dqml.qqmlapplicationengine;
+public import dqml.qqmlcontext;
+public import dqml.qquickview;
+public import dqml.qsignal;
+public import dqml.qslot;
+public import dqml.qvariant;
