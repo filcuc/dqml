@@ -1,4 +1,4 @@
-import dothersideinterface;
+import dqml.internal.dotherside;
 import std.string;
 
 class CharArray
