@@ -1,3 +1,5 @@
+module dqml.internal.chararray;
+
 import dqml.internal.dotherside;
 import std.string;
 

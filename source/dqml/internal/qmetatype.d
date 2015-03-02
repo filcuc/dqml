@@ -1,3 +1,5 @@
+module dqml.internal.qmetatype;
+
 /*
 enum Type {
         UnknownType = 0, Bool = 1, Int = 2, UInt = 3, LongLong = 4, ULongLong = 5,
