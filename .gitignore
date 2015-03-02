@@ -8,3 +8,7 @@ dub.selections.json
 *.sublime-project
 
 *.o
+
+__test__library__
+
+*.dylib

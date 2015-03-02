@@ -1,9 +1,10 @@
 {
-	"name": "DOtherSide",
+	"name": "dqml",
 	"description": "Qml bindings for both D and Nim programming languages.",
 	"targetType": "library",
-	"homepage": "http://github.com/filcuc/DOtherSide",
+	"homepage": "http://github.com/filcuc/dqml",
 	"copyright": "Copyright © 2014-2015 Filippo Cucchetto",
 	"authors": ["Filippo Cucchetto"],
 	"license": "LGPLv3",
+	"libs": ["DOtherSide"]
 }
