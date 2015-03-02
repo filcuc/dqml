@@ -1,16 +1,18 @@
+module dqml.qobject;
+
 import std.stdio;
 import std.conv;
 import std.container;
 import std.traits;
 import std.string;
-import dothersideinterface;
-import qmetatype;
-import qvariant;
-import qslot;
-import qsignal;
+import dqml.internal.dotherside;
+import dqml.internal.qmetatype;
+import dqml.qvariant;
+import dqml.qslot;
+import dqml.qsignal;
 
-public class QObject
-{
+class QObject
+{  
   this()
   {
     dos_qobject_create(this.data, cast (void*) this, &staticSlotCallback);
@@ -24,15 +26,21 @@ public class QObject
   private extern (C) static void staticSlotCallback(void* qObjectPtr,
 						    void* slotName,
 						    int numParameters,
-						    void** parametersArray)
+						    void** parametersArray) nothrow
   {
     QVariant[] parameters = new QVariant[numParameters];
     for (int i = 0; i < numParameters; ++i)
       parameters[i] = new QVariant(parametersArray[i]);
     QObject qObject = cast(QObject) qObjectPtr;
     QVariant name = new QVariant(slotName);
-    ISlot slot = qObject.slotsByName[name.toString()];
-    slot.Execute(parameters);
+    try
+    {
+      ISlot slot = qObject.slotsByName[name.toString()];
+      slot.Execute(parameters);
+    }
+    catch(Exception e)
+    {
+    }
   }
 
   protected auto registerSlot(T)(string name, T t) {

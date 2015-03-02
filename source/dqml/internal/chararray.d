@@ -3,8 +3,11 @@ module dqml.internal.chararray;
 import dqml.internal.dotherside;
 import std.string;
 
+
 class CharArray
-{  
+{ 
+nothrow:
+
   this()
   {
     _size = 0;
@@ -50,7 +53,10 @@ class CharArray
 
   override string toString()
   {
-    return fromStringz(_data).dup;
+    try
+      return fromStringz(_data).dup;
+    catch(Exception e)
+      return null;
   }
 
   private char* _data;

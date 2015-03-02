@@ -6,3 +6,5 @@
 dub.selections.json
 
 *.sublime-project
+
+*.o

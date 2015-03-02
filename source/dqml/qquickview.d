@@ -1,7 +1,10 @@
-import dothersideinterface;
-import qqmlcontext;
-import chararray;
+module dqml.qquickview;
+
+import dqml.internal.dotherside;
+import dqml.qqmlcontext;
+import dqml.internal.chararray;
 import std.string;
+
 
 class QQuickView
 { 

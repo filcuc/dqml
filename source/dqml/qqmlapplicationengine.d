@@ -1,27 +1,29 @@
-import dothersideinterface;
-import qqmlcontext;
+module dqml.qqmlapplicationengine;
+
+import dqml.internal.dotherside;
+import dqml.qqmlcontext;
 import std.string;
 
 class QQmlApplicationEngine
 {
-  public this()
+  this()
   {
     dos_qqmlapplicationengine_create(data);
   }
   
-  public ~this()
+  ~this()
   {
     dos_qqmlapplicationengine_delete(data);
   }
 
-  public QQmlContext context()
+  QQmlContext context()
   {
     void* contextData;
     dos_qqmlapplicationengine_context(data, contextData);
     return new QQmlContext(contextData);
   }
   
-  public void load(string filename)
+  void load(string filename)
   {
     dos_qqmlapplicationengine_load(data, filename.toStringz());
   }

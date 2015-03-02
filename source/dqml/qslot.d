@@ -1,27 +1,31 @@
+module dqml.qslot;
+
 import std.stdio;
 import std.container;
 import std.conv;
 import std.typecons;
 import std.traits;
-import qvariant;
-import qmetatype;
+import dqml.qvariant;
+import dqml.internal.qmetatype;
 
-public class ISlot
+
+class ISlot
 {
-  void Execute(QVariant[]  arguments) {}
+  nothrow void Execute(QVariant[]  arguments) {}
 }
 
-public QSlot!(T) CreateQSlot(T)(T t) if (isCallable!(T))
+QSlot!(T) CreateQSlot(T)(T t) if (isCallable!(T))
 {
   return new QSlot!(T)(t);
 }
 
-public class QSlot(T) : ISlot
+class QSlot(T) : ISlot
 { 
+
   alias ReturnType!T SlotReturnType;
   alias ParameterTypeTuple!T Arguments;
   
-  public this(T callable)
+  this(T callable)
   {
     _callable = callable;
     
@@ -31,32 +35,39 @@ public class QSlot(T) : ISlot
     }
   }
   
-  public override void Execute(QVariant[]  arguments)
+  nothrow override void Execute(QVariant[]  arguments)
   {
     Arguments argumentsTuple;
     
-    foreach (i, arg; argumentsTuple) {
-      arguments[i + 1].getValue(argumentsTuple[i]);
-    }
+    try
+    {
+      foreach (i, arg; argumentsTuple) {
+        arguments[i + 1].getValue(argumentsTuple[i]);
+      }
     
-    static if (is(SlotReturnType == void))
-    {
-      opCall(argumentsTuple);
+      static if (is(SlotReturnType == void))
+      {
+        opCall(argumentsTuple);
+      }
+      else
+      {
+        auto result = opCall(argumentsTuple);
+        arguments[0].setValue(result);
+      }
     }
-    else
+    catch(Exception e)
     {
-      auto result = opCall(argumentsTuple);
-      arguments[0].setValue(result);
+
     }
   }
   
-  public ReturnType!T opCall(Arguments arguments)
+  ReturnType!T opCall(Arguments arguments)
   {
     return _callable(arguments);
   }
   
-  public int[] GetParameterMetaTypes() { return _parameterMetaTypes; }
+   nothrow int[] GetParameterMetaTypes() { return _parameterMetaTypes; }
   
   private T _callable;
   private int[] _parameterMetaTypes = new int[Arguments.length + 1];
-};
+}

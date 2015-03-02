@@ -1,17 +1,22 @@
+module dqml.qsignal;
+
 import std.stdio;
 import std.conv;
 import std.string;
-import dothersideinterface;
-import qmetatype;
-import qobject;
-import qvariant;
+import dqml.internal.dotherside;
+import dqml.internal.qmetatype;
+import dqml.qobject;
+import dqml.qvariant;
 
-public class ISignal
+
+class ISignal
 {}
 
-public class QSignal(Args...) : ISignal
+class QSignal(Args...) : ISignal
 {
-  public this(QObject qObject, string name)
+  nothrow:
+
+  this(QObject qObject, string name)
   {
     this.qObject = qObject;
     this.name = name;
@@ -36,7 +41,7 @@ public class QSignal(Args...) : ISignal
 			    parametersPtrs.ptr);
   }
 
-  public int[] GetParameterMetaTypes() 
+  int[] GetParameterMetaTypes() 
   { 
     return parameterMetaTypes;
   }
@@ -44,7 +49,7 @@ public class QSignal(Args...) : ISignal
   private QObject qObject;
   private string name;
   private int[] parameterMetaTypes = new int[Args.length];
-};
+}
 
 public QSignal!(Args) CreateQSignal(Args...)(QObject qObject, string name)
 {

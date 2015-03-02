@@ -1,20 +1,22 @@
-import dothersideinterface;
-import qvariant;
-import chararray;
+module dqml.qqmlcontext;
+
+import dqml.internal.dotherside;
+import dqml.qvariant;
+import dqml.internal.chararray;
 
 class QQmlContext
 {
-  public this(void* data)
+  this(void* data)
   {
     this.data = data;
   }
 
-  public void* rawData()
+  void* rawData()
   {
     return data;
   }
 
-  public string baseUrl()
+  string baseUrl()
   {
     auto array = new CharArray();
     scope(exit) destroy(array);
@@ -22,7 +24,7 @@ class QQmlContext
     return array.toString();
   }
   
-  public void setContextProperty(string name, QVariant value)
+  void setContextProperty(string name, QVariant value)
   {
     dos_qqmlcontext_setcontextproperty(data, name.ptr, value.rawData());
   }

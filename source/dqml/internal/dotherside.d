@@ -50,7 +50,7 @@ void dos_qvariant_delete(void*);
 // QObject
 void dos_qobject_create(ref void*,
 	void* dobject,
-	void function (void*, void*, int , void**) @nogc nothrow);
+	void function (void*, void*, int , void**) nothrow);
 
 void dos_qobject_slot_create(void*,
 	immutable (char)* name,
