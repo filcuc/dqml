@@ -1,0 +1,16 @@
+
+*.a
+
+.dub/dub.json
+
+dub.selections.json
+
+*.sublime-project
+
+*.o
+
+__test__library__
+
+*.dylib
+
+examples/simple/simple
