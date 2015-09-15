@@ -1,48 +1,51 @@
 module dqml.qquickview;
-
-import dqml.internal.dotherside;
+import dqml.dothersideinterface;
 import dqml.qqmlcontext;
-import dqml.internal.chararray;
 import std.string;
 
-
 class QQuickView
-{ 
-  this()
-  {
-    dos_qquickview_create(data);
-  }
-  
-  ~this()
-  {
-    dos_qquickview_delete(data);
-  }
-  
-  void show()
-  {
-    dos_qquickview_show(data);
-  }
-  
-  QQmlContext rootContext()
-  {
-    void* contextData;
-    dos_qquickview_rootContext(data, contextData);
-    return new QQmlContext(contextData);
-  }
-  
-  string source()
-  {
-    auto array = new CharArray();
-    scope(exit) destroy(array);
-    dos_qquickview_source(data, array.dataRef(), array.sizeRef());
-    return array.toString();
-  }
-  
-  void setSource(string filename)
-  {
-    immutable(char)* filenameAsCString = filename.toStringz();
-    dos_qquickview_set_source(data, filenameAsCString);
-  }
+{
+    this()
+    {
+        dos_qquickview_create(this.vptr);
+    }
 
-  private void* data;
+    ~this()
+    {
+        dos_qquickview_delete(this.vptr);
+    }
+
+    public void* voidPointer()
+    {
+        return this.vptr;
+    }
+
+    public void show()
+    {
+        dos_qquickview_show(this.vptr);
+    }
+
+    public QQmlContext rootContext()
+    {
+        void* contextData;
+        dos_qquickview_rootContext(this.vptr, contextData);
+        return new QQmlContext(contextData);
+    }
+
+    public string source()
+    {
+        char* array;
+        dos_qquickview_source(this.vptr, array);
+        string result = fromStringz(array).dup;
+        dos_chararray_delete(array);
+        return result;
+    }
+
+    public void setSource(string filename)
+    {
+        immutable(char)* filenameAsCString = filename.toStringz();
+        dos_qquickview_set_source(this.vptr, filenameAsCString);
+    }
+
+    private void* vptr;
 }

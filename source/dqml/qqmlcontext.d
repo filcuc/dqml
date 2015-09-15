@@ -1,33 +1,33 @@
 module dqml.qqmlcontext;
-
-import dqml.internal.dotherside;
+import dqml.dothersideinterface;
 import dqml.qvariant;
-import dqml.internal.chararray;
+import std.string;
 
 class QQmlContext
 {
-  this(void* data)
-  {
-    this.data = data;
-  }
+    this(void* vptr)
+    {
+        this.vptr = vptr;
+    }
 
-  void* rawData()
-  {
-    return data;
-  }
+    public void* voidPointer()
+    {
+        return vptr;
+    }
 
-  string baseUrl()
-  {
-    auto array = new CharArray();
-    scope(exit) destroy(array);
-    dos_qqmlcontext_baseUrl(data, array.dataRef(), array.sizeRef());
-    return array.toString();
-  }
-  
-  void setContextProperty(string name, QVariant value)
-  {
-    dos_qqmlcontext_setcontextproperty(data, name.ptr, value.rawData());
-  }
+    public string baseUrl()
+    {
+        char* array;
+        dos_qqmlcontext_baseUrl(this.vptr, array);
+        string result = fromStringz(array).dup;
+        dos_chararray_delete(array);
+        return result;
+    }
 
-  private void* data;
+    public void setContextProperty(string name, QVariant value)
+    {
+        dos_qqmlcontext_setcontextproperty(this.vptr, name.ptr, value.voidPointer());
+    }
+
+    private void* vptr;
 }
