@@ -1,5 +1,5 @@
 1. Install DMD 
-2.Install [implib](http://www.digitalmars.com/download/freecompiler.html). 
+2. Install [implib](http://www.digitalmars.com/download/freecompiler.html). 
 It's contained in the basic utilities
 3. Install Qt 5.5 and from the installer components select
 ```
