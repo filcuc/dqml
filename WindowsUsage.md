@@ -33,11 +33,11 @@ cmd
 
 8) Adapt the previous content with your system paths for the tools
 
-9)  Double click on the .bat file. A cmd prompt should open
+9) Double click on the .bat file. A cmd prompt should open
 
-10)  Clone the DOtherSide project from git and navigate to its directory 
+10) Clone the DOtherSide project from git and navigate to its directory 
 
-11)  From the DOtherSide directory type the following command
+11) From the DOtherSide directory type the following command
 ```
 $) mkdir build
 $) cd build
@@ -46,9 +46,9 @@ $) mingw32-make
 $) cd src
 ```
 
-12) You should have the libDOtherSide.dll builded
+12) You should have builded the libDOtherSide.dll
 
-13) Renamed to DOtherSide.dll 
+13) Rename it to DOtherSide.dll 
 ```
 $) mv libDOtherSide.dll DOtherSide.dll
 ```
