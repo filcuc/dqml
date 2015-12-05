@@ -17,6 +17,8 @@ extern(C)
     // QQmlApplicationEngine
     void dos_qqmlapplicationengine_create(ref void*);
     void dos_qqmlapplicationengine_load(void*, immutable (char)* filename);
+    void dos_qqmlapplicationengine_load_url(void*, void*);
+    void dos_qqmlapplicationengine_add_import_path(void* vptr, immutable (char)* path);
     void dos_qqmlapplicationengine_context(void*, ref void*);
     void dos_qqmlapplicationengine_delete(void*);
 
@@ -124,4 +126,11 @@ extern(C)
     void dos_qabstractlistmodel_endResetModel(void* vptr);
     void dos_qabstractlistmodel_dataChanged(void* vptr, void* topLeft, void* bottomRight, int* rolesPtr, int rolesLength);
     void dos_qabstractlistmodel_delete(void*);
+
+    // QResource
+    void dos_qresource_register(immutable(char)* filename);
+
+    // QUrl
+    void dos_qurl_create(ref void*, immutable(char)*, int);
+    void dos_qurl_delete(void*);
 }

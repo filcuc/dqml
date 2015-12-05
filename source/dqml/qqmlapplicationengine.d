@@ -1,6 +1,7 @@
 module dqml.qqmlapplicationengine;
 import dqml.dothersideinterface;
 import dqml.qqmlcontext;
+import dqml.qurl;
 import std.string;
 
 class QQmlApplicationEngine
@@ -30,6 +31,16 @@ class QQmlApplicationEngine
     public void load(string filename)
     {
         dos_qqmlapplicationengine_load(this.vptr, filename.toStringz());
+    }
+
+    public void load(QUrl url)
+    {
+        dos_qqmlapplicationengine_load_url(this.vptr, url.voidPointer());
+    }
+
+    public void addImportPath(string path)
+    {
+        dos_qqmlapplicationengine_add_import_path(this.vptr, path.toStringz());
     }
 
     private void* vptr;

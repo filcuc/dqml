@@ -11,6 +11,8 @@ public import dqml.qmetatype;
 public import dqml.qmodelindex;
 public import dqml.qabstractlistmodel;
 public import dqml.qobjectgenerators;
+public import dqml.qurl;
+public import dqml.qresource;
 public import std.traits;
 public import std.algorithm;
 public import std.stdio;
