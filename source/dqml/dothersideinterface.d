@@ -2,6 +2,9 @@ module dqml.dothersideinterface;
 
 extern(C)
 {
+    // QCoreApplication
+    void dos_qcoreapplication_application_dir_path(ref char*);
+
     // QApplication
     void dos_qapplication_create();
     void dos_qapplication_exec();
