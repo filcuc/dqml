@@ -1,7 +1,9 @@
 module dqml.qapplication;
 import dqml.dothersideinterface;
+import dqml.qcoreapplication;
+import std.string;
 
-class QApplication
+class QApplication : QCoreApplication
 {
     this()
     {
