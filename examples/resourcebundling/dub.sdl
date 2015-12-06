@@ -1,0 +1,10 @@
+name "resourcebundling"
+description "Bundle QML files with the Qt Resource system."
+copyright "Copyright © 2015, Filippo Cucchetto & Moritz Maxeiner"
+authors "Moritz Maxeiner"
+
+dependency "dqml" path="../../"
+
+targetPath "bin"
+
+postBuildCommands "qtchooser -qt=5 -run-tool=rcc -binary source/app.qrc -o bin/app.rcc"
