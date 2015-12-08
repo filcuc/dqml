@@ -6,5 +6,16 @@
     "copyright": "Copyright © 2014-2015 Filippo Cucchetto",
     "authors": ["Filippo Cucchetto"],
     "license": "LGPLv3",
-    "libs": ["DOtherSide"]
+    "configurations": [
+        {
+            "name": "library",
+            "libs": ["DOtherSide"]
+        },
+        {
+            "name": "library-static",
+            "libs": ["DOtherSideStatic",
+                     "Qt5Core", "Qt5Qml", "Qt5Gui", "Qt5Quick", "Qt5Widgets",
+                     "stdc++"]
+        }
+    ]
 }
