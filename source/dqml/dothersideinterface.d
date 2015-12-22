@@ -30,6 +30,8 @@ extern(C)
     void dos_qquickview_show(void*);
     void dos_qquickview_source(void*, ref char *);
     void dos_qquickview_set_source(void*, immutable (char)* filename);
+    void dos_qquickview_set_source_url(void*, void*);
+    void dos_qquickview_set_resize_mode(void*, int);
     void dos_qquickview_rootContext(void*, ref void*);
     void dos_qquickview_delete(void*);
 
