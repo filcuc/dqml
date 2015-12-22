@@ -136,4 +136,5 @@ extern(C)
     // QUrl
     void dos_qurl_create(ref void*, immutable(char)*, int);
     void dos_qurl_delete(void*);
+    void dos_qurl_to_string(void* vptr, ref char* result);
 }
