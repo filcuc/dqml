@@ -177,6 +177,46 @@ public class QObject
         return result;
     }
 
+    template connect(alias slot)
+    {
+        protected static bool connect(QObject sender,
+                                      string signalName,
+                                      QObject receiver,
+                                      ConnectionType type = ConnectionType.Auto)
+        {
+            return connect(sender,
+                           SIGNAL!slot(signalName),
+                           receiver,
+                           SLOT!slot);
+        }
+
+        protected bool connect(QObject sender,
+                               string signalName,
+                               ConnectionType type = ConnectionType.Auto)
+        {
+            return connect!slot(sender, signalName, this);
+        }
+    }
+
+    template disconnect(alias slot)
+    {
+        protected static bool disconnect(QObject sender,
+                                         string signalName,
+                                         QObject receiver)
+        {
+            return disconnect(sender,
+                              SIGNAL!slot(signalName),
+                              receiver,
+                              SLOT!slot);
+        }
+
+        protected bool disconnect(QObject sender,
+                                  string signalName)
+        {
+            return disconnect!slot(sender, signalName, this);
+        }
+    }
+
     protected void* vptr;
     protected bool disableDosCalls;
 }
@@ -189,4 +229,22 @@ enum ConnectionType : int
     BlockingQueued,
 
     Unique = 0x80
+}
+
+template SIGNAL(alias slot)
+{
+    string SIGNAL(string signalName)
+    {
+        return "2" ~ signalName ~ QObjectSignalParameters!slot;
+    }
+}
+
+template SLOT(alias slot)
+{
+    enum string SLOT = "1" ~ __traits(identifier, slot) ~ QObjectSignalParameters!slot;
+}
+
+template QObjectSignalParameters(alias slot)
+{
+    enum string QObjectSignalParameters = (Parameters!slot).stringof.replace("string", "QString");
 }
