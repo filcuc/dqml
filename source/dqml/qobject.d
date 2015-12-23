@@ -28,6 +28,12 @@ public class QObject
         }
     }
 
+    package this(void* vptr)
+    {
+        this.vptr = vptr;
+        this(true);
+    }
+
     ~this()
     {
         if (!this.disableDosCalls)
@@ -71,6 +77,21 @@ public class QObject
                                   length,
                                   array.ptr,
                                   index);
+    }
+
+    protected bool connect(QObject sender,
+                           string signal,
+                           string method,
+                           ConnectionType type = ConnectionType.Auto)
+    {
+        return QObject.connect(sender, signal, this, method, type);
+    }
+
+    protected bool disconnect(QObject sender,
+                              string signal,
+                              string method)
+    {
+        return QObject.disconnect(sender, signal, this, method);
     }
 
     protected void registerProperty(string name,
@@ -126,6 +147,46 @@ public class QObject
         qObject.onSlotCalled(slotName, parameters);
     }
 
+    protected static bool connect(QObject sender,
+                                  string signal,
+                                  QObject receiver,
+                                  string method,
+                                  ConnectionType type = ConnectionType.Auto)
+    {
+        bool result;
+        dos_qobject_signal_connect(sender.voidPointer,
+                                   signal.toStringz,
+                                   receiver.voidPointer,
+                                   method.toStringz,
+                                   type,
+                                   result);
+        return result;
+    }
+
+    protected static bool disconnect(QObject sender,
+                                     string signal,
+                                     QObject receiver,
+                                     string method)
+    {
+        bool result;
+        dos_qobject_signal_disconnect(sender.voidPointer,
+                                      signal.toStringz,
+                                      receiver.voidPointer,
+                                      method.toStringz,
+                                      result);
+        return result;
+    }
+
     protected void* vptr;
     protected bool disableDosCalls;
+}
+
+enum ConnectionType : int
+{
+    Auto = 0,
+    Direct,
+    Queued,
+    BlockingQueued,
+
+    Unique = 0x80
 }
