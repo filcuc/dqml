@@ -28,6 +28,20 @@ class QQmlApplicationEngine
         return new QQmlContext(contextVPtr);
     }
 
+    public QObject[] rootObjects()
+    {
+        void** array;
+        int array_length;
+        dos_qqmlapplicationengine_rootObjects(this.vptr, array, array_length);
+
+        QObject[] objects;
+        objects.length = array_length;
+        for (int i = 0; i < array_length; i += 1) objects[i] = new QObject(array[i]);
+        import core.stdc.stdlib : free;
+        free(array);
+        return objects;
+    }
+
     public void load(string filename)
     {
         dos_qqmlapplicationengine_load(this.vptr, filename.toStringz());

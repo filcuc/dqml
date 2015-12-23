@@ -42,6 +42,23 @@ public class QObject
         return this.vptr;
     }
 
+    public string objectName() @property
+    {
+        char* array;
+        dos_qobject_objectName(this.vptr, array);
+        string result = fromStringz(array).dup;
+        dos_chararray_delete(array);
+        return result;
+    }
+
+    public QObject findChild(string name, FindChildOptions options = FindChildOptions.Recursively)
+    {
+        void* child;
+        dos_qobject_findChild(this.vptr, name.toStringz, options, child);
+        if (child is null) return null;
+        return new QObject(child);
+    }
+
     protected void qobjectInit()
     {}
 
@@ -128,4 +145,10 @@ public class QObject
 
     protected void* vptr;
     protected bool disableDosCalls;
+}
+
+enum FindChildOptions : int
+{
+    DirectOnly = 0,
+    Recursively
 }
