@@ -39,6 +39,9 @@ extern(C)
     // CharArray
     void dos_chararray_delete(char*);
 
+    // QObjectPtrArray
+    void dos_qobjectptr_array_delete(void** ptr);
+
     // QQmlContext
     void dos_qqmlcontext_baseUrl(void*, ref char*);
     void dos_qqmlcontext_setcontextproperty(void*, immutable (char)*, void*);

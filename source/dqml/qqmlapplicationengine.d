@@ -37,8 +37,7 @@ class QQmlApplicationEngine
         QObject[] objects;
         objects.length = array_length;
         for (int i = 0; i < array_length; i += 1) objects[i] = new QObject(array[i]);
-        import core.stdc.stdlib : free;
-        free(array);
+        dos_qobjectptr_array_delete(array);
         return objects;
     }
 
