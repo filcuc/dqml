@@ -26,5 +26,14 @@ class QUrl
         return this.vptr;
     }
 
+    override string toString()
+    {
+        char* array;
+        dos_qurl_to_string(vptr, array);
+        string result = fromStringz(array).dup;
+        dos_chararray_delete(array);
+        return result;
+    }
+
     private void* vptr;
 }

@@ -1,6 +1,7 @@
 module dqml.qquickview;
 import dqml.dothersideinterface;
 import dqml.qqmlcontext;
+import dqml.qurl;
 import std.string;
 
 class QQuickView
@@ -45,6 +46,22 @@ class QQuickView
     {
         immutable(char)* filenameAsCString = filename.toStringz();
         dos_qquickview_set_source(this.vptr, filenameAsCString);
+    }
+
+    public void setSource(QUrl url)
+    {
+        dos_qquickview_set_source_url(this.vptr, url.voidPointer);
+    }
+
+    enum ResizeMode : int
+    {
+        SizeViewToRootObject = 0,
+        SizeRootObjectToView
+    }
+
+    void setResizeMode(ResizeMode resizeMode)
+    {
+        dos_qquickview_set_resize_mode(this.vptr, resizeMode);
     }
 
     private void* vptr;
