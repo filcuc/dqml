@@ -1,0 +1,8 @@
+name "receivesignals"
+description "Receive signals via Qt signal/slot connections"
+copyright "Copyright © 2015, Filippo Cucchetto & Moritz Maxeiner"
+authors "Moritz Maxeiner"
+
+dependency "dqml" path="../../"
+
+copyFiles "source/app.qml"

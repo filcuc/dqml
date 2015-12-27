@@ -61,6 +61,7 @@ extern(C)
     void dos_qvariant_isnull(void*, ref bool);
     void dos_qvariant_delete(void*);
     void dos_qvariant_assign(void*, void*);
+    void dos_qvariant_toQObject(void* , ref void*);
     void dos_qvariant_setQObject(void*, void*);
 
     // QObject
@@ -83,6 +84,18 @@ extern(C)
     void dos_qobject_signal_emit(void*, immutable(char)* name,
                                  int parametersCount,
                                  void** parameters);
+
+    void dos_qobject_signal_connect(void*,
+                                    immutable(char)*,
+                                    void*,
+                                    immutable(char)*,
+                                    int,
+                                    ref bool);
+    void dos_qobject_signal_disconnect(void*,
+                                       immutable(char)*,
+                                       void*,
+                                       immutable(char)*,
+                                       ref bool);
 
     void dos_qobject_property_create(void*,
                                      immutable(char)* name,
