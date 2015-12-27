@@ -2,6 +2,7 @@ module dqml.qqmlapplicationengine;
 import dqml.dothersideinterface;
 import dqml.qqmlcontext;
 import dqml.qurl;
+import dqml.qobject;
 import std.string;
 
 class QQmlApplicationEngine
