@@ -13,6 +13,7 @@ public import dqml.qabstractlistmodel;
 public import dqml.qobjectgenerators;
 public import dqml.qurl;
 public import dqml.qresource;
+public import dqml.qmetaobjectfactory;
 public import std.traits;
 public import std.algorithm;
 public import std.stdio;

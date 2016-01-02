@@ -28,7 +28,7 @@ import dqml.qvariant;
   };
 */
 
-public enum QMetaType
+public enum QMetaType : int
 {
     Unknown = 0,
     Bool = 1,

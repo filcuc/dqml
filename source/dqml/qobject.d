@@ -7,6 +7,8 @@ import std.container;
 import std.traits;
 import std.string;
 import std.algorithm;
+import dqml.qmetaobjectfactory;
+import dqml.qobjectgenerators;
 import dqml.dothersideinterface;
 import dqml.qmetatype;
 import dqml.qvariant;
@@ -23,7 +25,7 @@ public class QObject
         this.disableDosCalls = disableDosCalls;
         if (!this.disableDosCalls)
         {
-            dos_qobject_create(this.vptr, cast(void*)this, &staticSlotCallback);
+          //dos_qobject_create(this.vptr, cast(void*)this, &staticSlotCallback);
             qobjectInit();
         }
     }
@@ -65,6 +67,16 @@ public class QObject
         return new QObject(child);
     }
 
+    public static QMetaObjectFactory staticMetaObject()
+    {
+        return null;
+    }
+
+    public QMetaObjectFactory metaObject()
+    {
+        return staticMetaObject();
+    }
+
     protected void qobjectInit()
     {}
 
@@ -77,11 +89,13 @@ public class QObject
         int index = -1;
         int  length = cast(int)types.length;
         int[] array = to!(int[])(types);
+        /*
         dos_qobject_slot_create(this.vptr,
                                 name.toStringz(),
                                 length,
                                 array.ptr,
                                 index);
+        */
     }
 
     protected void registerSignal(string name, QMetaType[] types)
@@ -89,11 +103,13 @@ public class QObject
         int index = -1;
         int length = cast(int)types.length;
         int[] array = length > 0 ? to!(int[])(types) : null;
+        /*
         dos_qobject_signal_create(this.vptr,
                                   name.toStringz(),
                                   length,
                                   array.ptr,
                                   index);
+        */
     }
 
     protected bool connect(QObject sender,
@@ -117,12 +133,14 @@ public class QObject
                                     string writeSlotName,
                                     string notifySignalName)
     {
+      /*
         dos_qobject_property_create(this.vptr,
                                     name.toStringz(),
                                     type,
                                     readSlotName.toStringz(),
                                     writeSlotName.toStringz(),
                                     notifySignalName.toStringz());
+      */
     }
 
     protected void emit(T)(string signalName, T t)

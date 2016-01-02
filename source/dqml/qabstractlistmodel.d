@@ -1,4 +1,5 @@
 module dqml.qabstractlistmodel;
+/*
 import dqml.dothersideinterface;
 import dqml.qobject;
 import dqml.qmodelindex;
@@ -183,3 +184,4 @@ class QAbstractListModel : QObject
         dos_qvariant_assign(result, value.voidPointer());
     }
 }
+*/

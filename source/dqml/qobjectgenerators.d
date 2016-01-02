@@ -1,4 +1,5 @@
 module dqml.qobjectgenerators;
+
 import std.traits;
 import std.algorithm;
 import std.string;
@@ -21,9 +22,9 @@ struct QtProperty
         this.notify = notify;
     }
 }
-struct QtSlot {};
-struct QtSignal {};
 
+struct QtSlot {}
+struct QtSignal {}
 
 string GenerateVariantConversionCall(string typeName)
 {
@@ -105,11 +106,12 @@ string GenerateSignalCall(FunctionInfo info)
         vars ~= format("val%d", i);
     }
 
-    auto result = format("public %s %s(%s) { emit(\"%s\", %s); }", info.returnType, info.name, args, info.name, vars);
+    string result = format("pragma(mangle,\"%s\")\n", info.mangle);
+    result ~= format("public %s %s(%s) { emit(\"%s\", %s); }", info.returnType, info.name, args, info.name, vars);
     return result;
 }
 
-string GenerateQtSignals(QtInfo info)
+string GenerateSignals(QtInfo info)
 {
     string result = "";
     foreach (signal; info.signals)
@@ -195,6 +197,7 @@ struct FunctionInfo
     string name;
     string returnType;
     string[] parameterTypes;
+    string mangle;
 }
 
 struct QtInfo
@@ -204,63 +207,110 @@ struct QtInfo
     QtProperty[] properties;
 }
 
-mixin template InjectQObjectMacro()
+public static QtInfo GetQtUDA(T)()
 {
-    private static QtInfo GetQtUDA(T)()
-    {
-        QtInfo result;
+    QtInfo result;
 
-        foreach (attribute; __traits(getAttributes, T)) {
-            static if (is (typeof(attribute) == QtProperty)) {
-                result.properties ~= attribute;
-            }
+    foreach (attribute; __traits(getAttributes, T)) {
+        static if (is (typeof(attribute) == QtProperty)) {
+            result.properties ~= attribute;
         }
-
-        foreach (member; __traits(allMembers, T))
-        {
-            static if (__traits(compiles, __traits(getMember, T, member))
-                       && isSomeFunction!(__traits(getMember, T, member)))
-            {
-                // Retrieve the UDA
-                auto attributes = __traits(getAttributes, __traits(getMember, T, member));
-
-                // Turn the tuple in an array of strings
-                string[] attributeNames;
-                foreach (attribute; attributes)
-                    attributeNames ~= typeof(attribute).stringof;
-
-                bool isSlot = attributeNames.canFind("QtSlot");
-                bool isSignal = attributeNames.canFind("QtSignal");
-
-                // Extract the Function Return Type and Arguments
-                if (isSlot || isSignal)
-                {
-                    FunctionInfo info;
-                    info.name = member;
-                    info.returnType = ReturnType!(__traits(getMember, T, member)).stringof;
-
-                    foreach (param; ParameterTypeTuple!(__traits(getMember, T, member)))
-                        info.parameterTypes ~= param.stringof;
-
-                    if (isSlot)
-                        result.slots ~= info;
-
-                    if (isSignal)
-                        result.signals ~= info;
-                }
-            }
-        }
-
-        return result;
     }
 
-    private static string Q_OBJECT(T)()
+    foreach (member; __traits(allMembers, T)) {
+        static if (__traits(compiles, __traits(getMember, T, member))
+                   && isSomeFunction!(__traits(getMember, T, member))) {
+            // Retrieve the UDA
+            auto attributes = __traits(getAttributes, __traits(getMember, T, member));
+
+            // Turn the tuple in an array of strings
+            string[] attributeNames;
+            foreach (attribute; attributes)
+                attributeNames ~= typeof(attribute).stringof;
+
+            bool isSlot = attributeNames.canFind("QtSlot");
+            bool isSignal = attributeNames.canFind("QtSignal");
+
+            // Extract the Function Return Type and Arguments
+            if (isSlot || isSignal) {
+                FunctionInfo info;
+                info.mangle = __traits(getMember, T, member).mangleof;
+                info.name = member;
+                info.returnType = ReturnType!(__traits(getMember, T, member)).stringof;
+
+                foreach (param; ParameterTypeTuple!(__traits(getMember, T, member)))
+                    info.parameterTypes ~= param.stringof;
+
+                if (isSlot)
+                    result.slots ~= info;
+
+                if (isSignal)
+                    result.signals ~= info;
+            }
+        }
+    }
+
+    return result;
+}
+
+public static string GenerateMetaObject(QtInfo info)
+{
+    string result =
+        "public static this() { m_staticMetaObject = createMetaObject(); }\n" ~
+        "private static QMetaObjectFactory m_staticMetaObject;\n" ~
+        "public static QMetaObjectFactory staticMetaObject() { return m_staticMetaObject; }\n" ~
+        "public override QMetaObjectFactory metaObject() { return staticMetaObject(); }\n"~
+        "private static QMetaObjectFactory superStaticMetaObject() { \n" ~
+        "  QMetaObjectFactory result = null;\n" ~
+        "  foreach(Type; BaseClassesTuple!(typeof(this))) {\n" ~
+        "    static if (__traits(compiles, Type.staticMetaObject())) {\n" ~
+        "      result = Type.staticMetaObject();\n" ~
+        "    }\n" ~
+        "  }\n" ~
+        "  return result;\n" ~
+        "}\n" ~
+        "private static QMetaObjectFactory createMetaObject() {\n" ~
+        "  QMetaObjectFactory superMetaObject = superStaticMetaObject();\n" ~
+        "  SignalDefinition[] signals = superMetaObject is null ? [] : superMetaObject.signals;\n" ~
+        "  SlotDefinition[] slots = superMetaObject is null ? [] : superMetaObject.slots;\n" ~
+        "  PropertyDefinition[] properties = superMetaObject is null ? [] : superMetaObject.properties;\n";
+
+    foreach(FunctionInfo signal; info.signals) {
+        result ~= format("  signals ~= SignalDefinition(\"%s\",[%s]);\n", signal.name, GenerateMetaTypesListForSignal(signal));
+    }
+
+    foreach(FunctionInfo slot; info.slots) {
+        string name = slot.name;
+        string returnType = GenerateMetaType(slot.returnType);
+        string parameters = GenerateMetaTypesListForSignal(slot);
+        result ~= format("  slots ~= SlotDefinition(\"%s\", %s, [%s]);\n", slot.name, returnType, parameters);
+    }
+
+    foreach(QtProperty property; info.properties) {
+        string name = property.name;
+        string type = GenerateMetaType(property.type);
+        string read = property.read;
+        string write = property.write;
+        string notify = property.notify;
+        result ~= format("  properties ~= PropertyDefinition(\"%s\", %s, \"%s\", \"%s\", \"%s\");\n", name, type, read, write, notify);
+    }
+
+    result ~=
+        "  return new QMetaObjectFactory(signals, slots, properties);\n}\n";
+    return result;
+}
+
+public mixin template Q_OBJECT()
+{
+    private static string GenerateCode()
     {
-        string result = "";
-        auto info = T.GetQtUDA!(T);
-        result ~= GenerateOnSlotCalled(info) ~ "\n";
-        result ~= GenerateQObjectInit(info) ~ "\n";
-        result ~= GenerateQtSignals(info) ~ "\n";
+        alias InjectedType = typeof(this);
+        alias info = GetQtUDA!InjectedType;
+        string result;
+        result ~= GenerateMetaObject(info);
+        result ~= GenerateOnSlotCalled(info);
+        result ~= GenerateSignals(info);
         return result;
     }
+    mixin(GenerateCode);
 }

@@ -71,26 +71,9 @@ extern(C)
     void dos_qvariant_setQObject(void*, void*);
 
     // QObject
-    void dos_qobject_create(ref void*,
-                            void* dobject,
-                            void function (void*, void*, int , void**));
-
-    void dos_qobject_slot_create(void*,
-                                 immutable (char)* name,
-                                 int parametersCount,
-                                 int* parametersMetaTypes,
-                                 ref int slotIndex);
-
-    void dos_qobject_signal_create(void*,
-                                   immutable(char)* name,
-                                   int parametersCount,
-                                   int* parametersMetaTypes,
-                                   ref int signalIndex);
-
     void dos_qobject_signal_emit(void*, immutable(char)* name,
                                  int parametersCount,
                                  void** parameters);
-
     void dos_qobject_signal_connect(void*,
                                     immutable(char)*,
                                     void*,
@@ -102,17 +85,8 @@ extern(C)
                                        void*,
                                        immutable(char)*,
                                        ref bool);
-
-    void dos_qobject_property_create(void*,
-                                     immutable(char)* name,
-                                     int propertyMetaType,
-                                     immutable(char)* readSlot,
-                                     immutable(char)* writeSlot,
-                                     immutable(char)* notifySignal);
-
     void dos_qobject_objectName(void*, ref char*);
     void dos_qobject_findChild(void*, immutable(char)*, int, ref void*);
-
     void dos_qobject_delete(void*);
 
     // QModelIndex
@@ -159,4 +133,53 @@ extern(C)
     void dos_qurl_create(ref void*, immutable(char)*, int);
     void dos_qurl_delete(void*);
     void dos_qurl_to_string(void* vptr, ref char* result);
+
+    // QMetaObjectFactory
+    struct DosSignalDefinition
+    {
+      immutable(char)* name;
+      int parametersCount;
+      int* parametersTypes;
+    }
+
+    struct DosSignalDefinitions
+    {
+      int count;
+      DosSignalDefinition* definitions;
+    }
+
+    struct DosSlotDefinition
+    {
+      immutable(char)* name;
+      int returnType;
+      int parametersCount;
+      int* parametersTypes;
+    }
+
+    struct DosSlotDefinitions
+    {
+      int count;
+      DosSlotDefinition* definitions;
+    }
+
+    struct DosPropertyDefinition
+    {
+      immutable(char)* name;
+      int type;
+      immutable(char)* readSlot;
+      immutable(char)* writeSlot;
+      immutable(char)* notifySignal;
+    }
+
+    struct DosPropertyDefinitions
+    {
+      int count;
+      DosPropertyDefinition* definitions;
+    }
+
+    void dos_qmetaobjectfactory_create(ref void*,
+                                   DosSignalDefinitions signalDefinitions,
+                                   DosSlotDefinitions slotDefinitions,
+                                   DosPropertyDefinitions propertyDefinitions);
+    void dos_qmetaobjectfactory_delete(void*);
 }
