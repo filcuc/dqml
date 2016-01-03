@@ -129,6 +129,11 @@ public class QMetaObjectFactory
         return result;
     }
 
+    public void* voidPointer()
+    {
+        return this.vptr;
+    }
+
     private void* vptr;
     private PropertyDefinition[] propertyDefinitions;
     private SignalDefinition[] signalDefinitions;

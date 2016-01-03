@@ -15,6 +15,11 @@ import dqml.qvariant;
 
 public class QObject
 {
+    shared static this()
+    {
+        m_staticMetaObject = new QMetaObjectFactory([], [], []);
+    }
+
     public this()
     {
         this(false);
@@ -25,12 +30,13 @@ public class QObject
         this.disableDosCalls = disableDosCalls;
         if (!this.disableDosCalls)
         {
-          //dos_qobject_create(this.vptr, cast(void*)this, &staticSlotCallback);
-            qobjectInit();
+           dos_qobject_create(this.vptr, cast(void*)this,
+                              &staticMetaObjectCallback,
+                              &staticSlotCallback);
         }
     }
 
-    package this(void* vptr)
+    public this(void* vptr)
     {
         this.vptr = vptr;
         this(true);
@@ -50,7 +56,7 @@ public class QObject
         return this.vptr;
     }
 
-    public string objectName() @property
+    @property public string objectName()
     {
         char* array;
         dos_qobject_objectName(this.vptr, array);
@@ -69,7 +75,7 @@ public class QObject
 
     public static QMetaObjectFactory staticMetaObject()
     {
-        return null;
+        return m_staticMetaObject;
     }
 
     public QMetaObjectFactory metaObject()
@@ -77,39 +83,8 @@ public class QObject
         return staticMetaObject();
     }
 
-    protected void qobjectInit()
-    {}
-
     protected void onSlotCalled(QVariant slotName, QVariant[] parameters)
     {
-    }
-
-    protected void registerSlot(string name, QMetaType[] types)
-    {
-        int index = -1;
-        int  length = cast(int)types.length;
-        int[] array = to!(int[])(types);
-        /*
-        dos_qobject_slot_create(this.vptr,
-                                name.toStringz(),
-                                length,
-                                array.ptr,
-                                index);
-        */
-    }
-
-    protected void registerSignal(string name, QMetaType[] types)
-    {
-        int index = -1;
-        int length = cast(int)types.length;
-        int[] array = length > 0 ? to!(int[])(types) : null;
-        /*
-        dos_qobject_signal_create(this.vptr,
-                                  name.toStringz(),
-                                  length,
-                                  array.ptr,
-                                  index);
-        */
     }
 
     protected bool connect(QObject sender,
@@ -125,22 +100,6 @@ public class QObject
                               string method)
     {
         return QObject.disconnect(sender, signal, this, method);
-    }
-
-    protected void registerProperty(string name,
-                                    QMetaType type,
-                                    string readSlotName,
-                                    string writeSlotName,
-                                    string notifySignalName)
-    {
-      /*
-        dos_qobject_property_create(this.vptr,
-                                    name.toStringz(),
-                                    type,
-                                    readSlotName.toStringz(),
-                                    writeSlotName.toStringz(),
-                                    notifySignalName.toStringz());
-      */
     }
 
     protected void emit(T)(string signalName, T t)
@@ -168,6 +127,13 @@ public class QObject
                                 length,
                                 array.ptr);
     }
+
+    protected extern (C) static void staticMetaObjectCallback(void* qObjectPtr, ref void* result)
+    {
+        QObject qObject = cast(QObject) qObjectPtr;
+        result = qObject.metaObject().voidPointer();
+    }
+
 
     protected extern (C) static void staticSlotCallback(void* qObjectPtr,
                                                         void* rawSlotName,
@@ -254,6 +220,7 @@ public class QObject
 
     protected void* vptr;
     protected bool disableDosCalls;
+    private static QMetaObjectFactory m_staticMetaObject;
 }
 
 enum FindChildOptions : int

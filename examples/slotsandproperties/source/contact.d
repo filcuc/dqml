@@ -4,12 +4,11 @@ import dqml;
 @QtProperty(string.stringof, "surname", "getSurname", "setSurname", "surnameChanged")
 class Contact : QObject
 {
-    mixin InjectQObjectMacro;
-    mixin(Q_OBJECT!(Contact));
-    
+    mixin Q_OBJECT;
+
     this()
     {}
-    
+
     ~this()
     {}
 
@@ -22,11 +21,10 @@ class Contact : QObject
     @QtSlot()
     public void setName(string name)
     {
-        if (m_name != name)
-        {
-            m_name = name;
-            emit("nameChanged", name);
-        }
+        if (m_name == name)
+            return;
+        m_name = name;
+        nameChanged(name);
     }
 
     @QtSignal()
@@ -41,7 +39,10 @@ class Contact : QObject
     @QtSlot()
     public void setSurname(string surname)
     {
+        if (m_surname == surname)
+            return;
         m_surname = surname;
+        surnameChanged(surname);
     }
 
     @QtSignal()

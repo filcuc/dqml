@@ -71,6 +71,9 @@ extern(C)
     void dos_qvariant_setQObject(void*, void*);
 
     // QObject
+    void dos_qobject_create(ref void*, void*,
+                            void function (void*, ref void*),
+                            void function (void*, void*, int , void**));
     void dos_qobject_signal_emit(void*, immutable(char)* name,
                                  int parametersCount,
                                  void** parameters);

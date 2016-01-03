@@ -164,34 +164,6 @@ string GenerateMetaTypesListForSignal(FunctionInfo info)
     return result;
 }
 
-string GenerateQObjectInit(QtInfo info)
-{
-    string result = "";
-    result ~= "protected override void qobjectInit()\n";
-    result ~= "{\n";
-    foreach (slot; info.slots)
-    {
-        auto metaTypes = GenerateMetaTypesListForSlot(slot);
-        result ~= format("registerSlot(\"%s\", [%s]);\n", slot.name, metaTypes);
-    }
-
-    foreach (signal; info.signals)
-    {
-        auto metaTypes = GenerateMetaTypesListForSignal(signal);
-        result ~= format("registerSignal(\"%s\", [%s]);\n", signal.name, metaTypes);
-    }
-
-    foreach (property; info.properties)
-    {
-        result ~= format("registerProperty(\"%s\", %s, \"%s\", \"%s\", \"%s\");\n", property.name, GenerateMetaType(property.type), property.read, property.write, property.notify);
-    }
-
-    result ~= "super.qobjectInit();\n";
-
-    result ~= "}";
-    return result;
-}
-
 struct FunctionInfo
 {
     string name;
@@ -217,7 +189,7 @@ public static QtInfo GetQtUDA(T)()
         }
     }
 
-    foreach (member; __traits(allMembers, T)) {
+    foreach (member; __traits(derivedMembers, T)) {
         static if (__traits(compiles, __traits(getMember, T, member))
                    && isSomeFunction!(__traits(getMember, T, member))) {
             // Retrieve the UDA
@@ -256,15 +228,15 @@ public static QtInfo GetQtUDA(T)()
 public static string GenerateMetaObject(QtInfo info)
 {
     string result =
-        "public static this() { m_staticMetaObject = createMetaObject(); }\n" ~
+        "shared static this() { m_staticMetaObject = createMetaObject(); }\n" ~
         "private static QMetaObjectFactory m_staticMetaObject;\n" ~
         "public static QMetaObjectFactory staticMetaObject() { return m_staticMetaObject; }\n" ~
-        "public override QMetaObjectFactory metaObject() { return staticMetaObject(); }\n"~
+        "public override QMetaObjectFactory metaObject() { return (typeof(this)).staticMetaObject(); }\n"~
         "private static QMetaObjectFactory superStaticMetaObject() { \n" ~
         "  QMetaObjectFactory result = null;\n" ~
         "  foreach(Type; BaseClassesTuple!(typeof(this))) {\n" ~
         "    static if (__traits(compiles, Type.staticMetaObject())) {\n" ~
-        "      result = Type.staticMetaObject();\n" ~
+        "      result = result is null ? Type.staticMetaObject() : result;\n" ~
         "    }\n" ~
         "  }\n" ~
         "  return result;\n" ~
@@ -304,8 +276,7 @@ public mixin template Q_OBJECT()
 {
     private static string GenerateCode()
     {
-        alias InjectedType = typeof(this);
-        alias info = GetQtUDA!InjectedType;
+        alias info = GetQtUDA!(typeof(this));
         string result;
         result ~= GenerateMetaObject(info);
         result ~= GenerateOnSlotCalled(info);
