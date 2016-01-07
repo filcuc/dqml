@@ -225,27 +225,18 @@ public static QtInfo GetQtUDA(T)()
     return result;
 }
 
-public static string GenerateMetaObject(QtInfo info)
+public static string GenerateMetaObject(string qobjectSuperClassName, QtInfo info)
 {
     string result =
         "shared static this() { m_staticMetaObject = createMetaObject(); }\n" ~
         "private static QMetaObject m_staticMetaObject;\n" ~
         "public static QMetaObject staticMetaObject() { return m_staticMetaObject; }\n" ~
-        "public override QMetaObject metaObject() { return (typeof(this)).staticMetaObject(); }\n"~
-        "private static QMetaObject superStaticMetaObject() { \n" ~
-        "  QMetaObject result = null;\n" ~
-        "  foreach(Type; BaseClassesTuple!(typeof(this))) {\n" ~
-        "    static if (__traits(compiles, Type.staticMetaObject())) {\n" ~
-        "      result = result is null ? Type.staticMetaObject() : result;\n" ~
-        "    }\n" ~
-        "  }\n" ~
-        "  return result;\n" ~
-        "}\n" ~
+        "public override QMetaObject metaObject() { return staticMetaObject(); }\n"~
         "private static QMetaObject createMetaObject() {\n" ~
-        "  QMetaObject superMetaObject = superStaticMetaObject();\n" ~
-        "  SignalDefinition[] signals = superMetaObject is null ? [] : superMetaObject.signals;\n" ~
-        "  SlotDefinition[] slots = superMetaObject is null ? [] : superMetaObject.slots;\n" ~
-        "  PropertyDefinition[] properties = superMetaObject is null ? [] : superMetaObject.properties;\n";
+        "  QMetaObject superMetaObject = " ~ qobjectSuperClassName ~ ".staticMetaObject();\n" ~
+        "  SignalDefinition[] signals = [];\n" ~
+        "  SlotDefinition[] slots = [];\n" ~
+        "  PropertyDefinition[] properties = [];\n";
 
     foreach(FunctionInfo signal; info.signals) {
         result ~= format("  signals ~= SignalDefinition(\"%s\",[%s]);\n", signal.name, GenerateMetaTypesListForSignal(signal));
@@ -272,13 +263,23 @@ public static string GenerateMetaObject(QtInfo info)
     return result;
 }
 
+public static string QObjectSuperClass(T)()
+{
+    foreach (Type; BaseClassesTuple!T) {
+        static if (__traits(compiles, Type.staticMetaObject())) {
+            return Type.stringof;
+        }
+    }
+}
+
 public mixin template Q_OBJECT()
 {
     private static string GenerateCode()
     {
-        alias info = GetQtUDA!(typeof(this));
+        alias outerType = typeof(this);
+        alias info = GetQtUDA!outerType;
         string result;
-        result ~= GenerateMetaObject(info);
+        result ~= GenerateMetaObject(QObjectSuperClass!outerType, info);
         result ~= GenerateOnSlotCalled(info);
         result ~= GenerateSignals(info);
         return result;
