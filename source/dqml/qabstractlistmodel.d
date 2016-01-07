@@ -1,5 +1,5 @@
 module dqml.qabstractlistmodel;
-/*
+
 import dqml.dothersideinterface;
 import dqml.qobject;
 import dqml.qmodelindex;
@@ -11,22 +11,23 @@ class QAbstractListModel : QObject
     this()
     {
         super(true);
-        dos_qabstractlistmodel_create(this.vptr,
-                                      cast(void*)this,
-                                      &staticSlotCallback,
-                                      &rowCountCallback,
-                                      &columnCountCallback,
-                                      &dataCallback,
-                                      &setDataCallback,
-                                      &roleNamesCallback,
-                                      &flagsCallback,
-                                      &headerDataCallback);
-        qobjectInit();
+        /*
+          dos_qabstractlistmodel_create(this.vptr,
+          cast(void*)this,
+          &staticSlotCallback,
+          &rowCountCallback,
+          &columnCountCallback,
+          &dataCallback,
+          &setDataCallback,
+          &roleNamesCallback,
+          &flagsCallback,
+          &headerDataCallback);
+        */
     }
 
     ~this()
     {
-        dos_qabstractlistmodel_delete(this.vptr);
+      //        dos_qabstractlistmodel_delete(this.vptr);
     }
 
     public int rowCount(QModelIndex parentIndex)
@@ -66,47 +67,52 @@ class QAbstractListModel : QObject
 
     protected final void beginInsertRows(QModelIndex parent, int first, int last)
     {
+        /*
         dos_qabstractlistmodel_beginInsertRows(this.vptr,
                                                parent.voidPointer(),
                                                first,
                                                last);
+        */
     }
 
     protected final void endInsertRows()
     {
-        dos_qabstractlistmodel_endInsertRows(this.vptr);
+        //        dos_qabstractlistmodel_endInsertRows(this.vptr);
     }
 
     protected final void beginRemoveRows(QModelIndex parent, int first, int last)
     {
+        /*
         dos_qabstractlistmodel_beginRemoveRows(this.vptr,
                                                parent.voidPointer(),
                                                first,
                                                last);
+        */
     }
 
     protected final void endRemoveRows()
     {
-        dos_qabstractlistmodel_endRemoveRows(this.vptr);
+        //        dos_qabstractlistmodel_endRemoveRows(this.vptr);
     }
 
     protected final void beginResetModel()
     {
-        dos_qabstractlistmodel_beginResetModel(this.vptr);
+        //        dos_qabstractlistmodel_beginResetModel(this.vptr);
     }
 
     protected final void endResetModel()
     {
-        dos_qabstractlistmodel_endResetModel(this.vptr);
+        //        dos_qabstractlistmodel_endResetModel(this.vptr);
     }
 
     protected final void dataChanged(QModelIndex topLeft, QModelIndex bottomRight, int[] roles)
     {
-        dos_qabstractlistmodel_dataChanged(this.vptr,
+        /*        dos_qabstractlistmodel_dataChanged(this.vptr,
                                            topLeft.voidPointer(),
                                            bottomRight.voidPointer(),
                                            roles.ptr,
                                            cast(int)(roles.length));
+        */
     }
 
     private extern (C) static void rowCountCallback(void* modelPtr,
@@ -184,4 +190,3 @@ class QAbstractListModel : QObject
         dos_qvariant_assign(result, value.voidPointer());
     }
 }
-*/

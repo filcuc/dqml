@@ -7,7 +7,7 @@ import std.container;
 import std.traits;
 import std.string;
 import std.algorithm;
-import dqml.qmetaobjectfactory;
+import dqml.qmetaobject;
 import dqml.qobjectgenerators;
 import dqml.dothersideinterface;
 import dqml.qmetatype;
@@ -17,7 +17,9 @@ public class QObject
 {
     shared static this()
     {
-        m_staticMetaObject = new QMetaObjectFactory([], [], []);
+        void* vptr;
+        dos_qobject_qmetaobject(vptr);
+        m_staticMetaObject = new QMetaObject(vptr);
     }
 
     public this()
@@ -73,12 +75,12 @@ public class QObject
         return new QObject(child);
     }
 
-    public static QMetaObjectFactory staticMetaObject()
+    public static QMetaObject staticMetaObject()
     {
         return m_staticMetaObject;
     }
 
-    public QMetaObjectFactory metaObject()
+    public QMetaObject metaObject()
     {
         return staticMetaObject();
     }
@@ -220,7 +222,7 @@ public class QObject
 
     protected void* vptr;
     protected bool disableDosCalls;
-    private static QMetaObjectFactory m_staticMetaObject;
+    private static QMetaObject m_staticMetaObject;
 }
 
 enum FindChildOptions : int

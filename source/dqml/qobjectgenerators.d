@@ -229,11 +229,11 @@ public static string GenerateMetaObject(QtInfo info)
 {
     string result =
         "shared static this() { m_staticMetaObject = createMetaObject(); }\n" ~
-        "private static QMetaObjectFactory m_staticMetaObject;\n" ~
-        "public static QMetaObjectFactory staticMetaObject() { return m_staticMetaObject; }\n" ~
-        "public override QMetaObjectFactory metaObject() { return (typeof(this)).staticMetaObject(); }\n"~
-        "private static QMetaObjectFactory superStaticMetaObject() { \n" ~
-        "  QMetaObjectFactory result = null;\n" ~
+        "private static QMetaObject m_staticMetaObject;\n" ~
+        "public static QMetaObject staticMetaObject() { return m_staticMetaObject; }\n" ~
+        "public override QMetaObject metaObject() { return (typeof(this)).staticMetaObject(); }\n"~
+        "private static QMetaObject superStaticMetaObject() { \n" ~
+        "  QMetaObject result = null;\n" ~
         "  foreach(Type; BaseClassesTuple!(typeof(this))) {\n" ~
         "    static if (__traits(compiles, Type.staticMetaObject())) {\n" ~
         "      result = result is null ? Type.staticMetaObject() : result;\n" ~
@@ -241,8 +241,8 @@ public static string GenerateMetaObject(QtInfo info)
         "  }\n" ~
         "  return result;\n" ~
         "}\n" ~
-        "private static QMetaObjectFactory createMetaObject() {\n" ~
-        "  QMetaObjectFactory superMetaObject = superStaticMetaObject();\n" ~
+        "private static QMetaObject createMetaObject() {\n" ~
+        "  QMetaObject superMetaObject = superStaticMetaObject();\n" ~
         "  SignalDefinition[] signals = superMetaObject is null ? [] : superMetaObject.signals;\n" ~
         "  SlotDefinition[] slots = superMetaObject is null ? [] : superMetaObject.slots;\n" ~
         "  PropertyDefinition[] properties = superMetaObject is null ? [] : superMetaObject.properties;\n";
@@ -268,7 +268,7 @@ public static string GenerateMetaObject(QtInfo info)
     }
 
     result ~=
-        "  return new QMetaObjectFactory(signals, slots, properties);\n}\n";
+        "  return new QMetaObject(superMetaObject, typeof(this).stringof, signals, slots, properties);\n}\n";
     return result;
 }
 

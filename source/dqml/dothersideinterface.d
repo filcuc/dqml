@@ -71,6 +71,7 @@ extern(C)
     void dos_qvariant_setQObject(void*, void*);
 
     // QObject
+    void dos_qobject_qmetaobject(ref void*);
     void dos_qobject_create(ref void*, void*,
                             void function (void*, ref void*),
                             void function (void*, void*, int , void**));
@@ -110,6 +111,7 @@ extern(C)
     void dos_qhash_int_qbytearray_value(void*, int, ref char*);
 
     // QAbstractListModel
+    void dos_qabstractlistmodel_qmetaobject(ref void*);
     void dos_qabstractlistmodel_create(ref void*,
                                        void*,
                                        void function (void*, void*, int, void**),
@@ -180,9 +182,11 @@ extern(C)
       DosPropertyDefinition* definitions;
     }
 
-    void dos_qmetaobjectfactory_create(ref void*,
-                                   DosSignalDefinitions signalDefinitions,
-                                   DosSlotDefinitions slotDefinitions,
-                                   DosPropertyDefinitions propertyDefinitions);
-    void dos_qmetaobjectfactory_delete(void*);
+    void dos_qmetaobject_create(ref void*,
+                                       void* superclass,
+                                       immutable(char)* className,
+                                       DosSignalDefinitions signalDefinitions,
+                                       DosSlotDefinitions slotDefinitions,
+                                       DosPropertyDefinitions propertyDefinitions);
+    void dos_qmetaobject_delete(void*);
 }

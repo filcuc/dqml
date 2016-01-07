@@ -1,4 +1,4 @@
-module dqml.qmetaobjectfactory;
+module dqml.qmetaobject;
 import dqml.dothersideinterface;
 import dqml.qmetatype;
 import std.string;
@@ -47,9 +47,16 @@ public struct PropertyDefinition
     string notifySignal;
 }
 
-public class QMetaObjectFactory
+public class QMetaObject
 {
-    public this(SignalDefinition[] signalDefinitions,
+    public this(void* vptr)
+    {
+        this.vptr = vptr;
+    }
+
+    public this(QMetaObject superClass,
+                string className,
+                SignalDefinition[] signalDefinitions,
                 SlotDefinition[] slotDefinitions,
                 PropertyDefinition[] propertyDefinitions)
     {
@@ -72,15 +79,17 @@ public class QMetaObjectFactory
         dosPropertyDefinitions.count = cast(int) propertyDefinitionsArray.length;
         dosPropertyDefinitions.definitions = propertyDefinitionsArray.ptr;
 
-        dos_qmetaobjectfactory_create(this.vptr,
-                                      dosSignalDefinitions,
-                                      dosSlotDefinitions,
-                                      dosPropertyDefinitions);
+        dos_qmetaobject_create(this.vptr,
+                               superClass.vptr,
+                               className.toStringz(),
+                               dosSignalDefinitions,
+                               dosSlotDefinitions,
+                               dosPropertyDefinitions);
     }
 
     public ~this()
     {
-        dos_qmetaobjectfactory_delete(this.vptr);
+        dos_qmetaobject_delete(this.vptr);
     }
 
     @property SignalDefinition[] signals() { return signalDefinitions; }
