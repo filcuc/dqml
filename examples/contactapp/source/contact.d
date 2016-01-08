@@ -4,8 +4,7 @@ import dqml;
 @QtProperty(string.stringof, "lastName", "lastName", "setLastName", "lastNameChanged")
 class Contact : QObject
 {
-    mixin InjectQObjectMacro;
-    mixin(Q_OBJECT!(Contact));
+    mixin Q_OBJECT;
 
     this(string firstName = "", string lastName = "")
     {

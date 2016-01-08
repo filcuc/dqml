@@ -5,8 +5,7 @@ import std.algorithm;
 
 class ContactList : QAbstractListModel
 {
-    mixin InjectQObjectMacro;
-    mixin(Q_OBJECT!(ContactList));
+    mixin Q_OBJECT;
 
     this()
     {
@@ -26,15 +25,15 @@ class ContactList : QAbstractListModel
     {
         if (index is null)
             return null;
-        
+
         if (!index.isValid())
             return null;
-        
+
         if (index.row() < 0 || index.row() >= rowCount())
             return null;
 
         auto contact = this.m_contacts[index.row];
-        
+
         switch(role)
         {
         case Roles.FirstName:
