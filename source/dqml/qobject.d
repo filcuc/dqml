@@ -22,12 +22,7 @@ public class QObject
         m_staticMetaObject = new QMetaObject(vptr);
     }
 
-    public this()
-    {
-        this(false);
-    }
-
-    protected this(bool disableDosCalls)
+    public this(bool disableDosCalls = false)
     {
         this.disableDosCalls = disableDosCalls;
         if (!this.disableDosCalls)
