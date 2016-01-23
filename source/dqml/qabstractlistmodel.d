@@ -20,7 +20,7 @@ class QAbstractListModel : QObject
     {
         super(true);
         dos_qabstractlistmodel_create(this.vptr, cast(void*)this,
-                                      &staticMetaObjectCallback,
+                                      metaObject().voidPointer(),
                                       &staticSlotCallback,
                                       &rowCountCallback,
                                       &columnCountCallback,

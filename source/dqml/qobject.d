@@ -28,7 +28,7 @@ public class QObject
         if (!this.disableDosCalls)
         {
            dos_qobject_create(this.vptr, cast(void*)this,
-                              &staticMetaObjectCallback,
+                              metaObject().voidPointer(),
                               &staticSlotCallback);
         }
     }

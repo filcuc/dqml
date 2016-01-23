@@ -72,8 +72,7 @@ extern(C)
 
     // QObject
     void dos_qobject_qmetaobject(ref void*);
-    void dos_qobject_create(ref void*, void*,
-                            void function (void*, ref void*),
+    void dos_qobject_create(ref void*, void*, void*,
                             void function (void*, void*, int , void**));
     void dos_qobject_signal_emit(void*, immutable(char)* name,
                                  int parametersCount,
@@ -112,8 +111,7 @@ extern(C)
 
     // QAbstractListModel
     void dos_qabstractlistmodel_qmetaobject(ref void*);
-    void dos_qabstractlistmodel_create(ref void*, void*,
-                                       void function (void*, ref void*),
+    void dos_qabstractlistmodel_create(ref void*, void*, void*,
                                        void function (void*, void*, int, void**),
                                        void function (void*, void*, ref int),
                                        void function (void*, void*, ref int),
