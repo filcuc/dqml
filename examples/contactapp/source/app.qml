@@ -18,7 +18,7 @@ ApplicationWindow {
             MenuItem { text: "&Exit"; onTriggered: logic.onExitTriggered() }
         }
     }
-    
+
 	ColumnLayout {
 	    anchors.fill: parent
 
@@ -29,9 +29,9 @@ ApplicationWindow {
                 property var styleData: undefined
                 states: State {
                     when: styleData !== undefined
-                    PropertyChanges { 
-                        target: tableTextDelegateInstance; 
-                        text: styleData.value; 
+                    PropertyChanges {
+                        target: tableTextDelegateInstance;
+                        text: styleData.value;
                         color: styleData.textColor
                     }
                 }
@@ -83,11 +83,11 @@ ApplicationWindow {
             TextField { id: nameTextField; Layout.fillWidth: true; text: "" }
             Label { text: "LastName" }
             TextField { id: surnameTextField; Layout.fillWidth: true; text: "" }
-            Button { 
+            Button {
                 text: "Add"
                 onClicked: logic.contactList.add(nameTextField.text, surnameTextField.text)
                 enabled: nameTextField.text !== "" && surnameTextField.text !== ""
             }
         }
-	}
+    }
 }
