@@ -1,7 +1,7 @@
 import dqml;
 
-@QtProperty(string.stringof, "name", "getName", "setName", "nameChanged")
-@QtProperty(string.stringof, "surname", "getSurname", "setSurname", "surnameChanged")
+@QtProperty(string.stringof, "name", "name", "setName", "nameChanged")
+@QtProperty(string.stringof, "surname", "surname", "setSurname", "surnameChanged")
 class Contact : QObject
 {
     mixin Q_OBJECT;
@@ -13,7 +13,7 @@ class Contact : QObject
     {}
 
     @QtSlot()
-    public string getName()
+    public string name()
     {
         return m_name;
     }
@@ -31,7 +31,7 @@ class Contact : QObject
     public void nameChanged(string name);
 
     @QtSlot()
-    public string getSurname()
+    public string surname()
     {
         return m_surname;
     }

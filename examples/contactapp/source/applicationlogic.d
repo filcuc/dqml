@@ -2,7 +2,7 @@ import dqml;
 import contactlist;
 import std.stdio;
 
-@QtProperty(QObject.stringof, "contactList", "getContactList", null, null)
+@QtProperty(QObject.stringof, "contactList", "contactList", null, null)
 class ApplicationLogic : QObject
 {
     mixin Q_OBJECT;
@@ -15,7 +15,7 @@ class ApplicationLogic : QObject
 
 
     @QtSlot()
-    public QObject getContactList()
+    public QObject contactList()
     {
         return this.m_contactList;
     }
