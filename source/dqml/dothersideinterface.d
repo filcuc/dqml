@@ -140,51 +140,60 @@ extern(C)
     // QMetaObjectFactory
     struct DosSignalDefinition
     {
-      immutable(char)* name;
-      int parametersCount;
-      int* parametersTypes;
+        immutable(char)* name;
+        int parametersCount;
+        int* parametersTypes;
     }
 
     struct DosSignalDefinitions
     {
-      int count;
-      DosSignalDefinition* definitions;
+        int count;
+        DosSignalDefinition* definitions;
     }
 
     struct DosSlotDefinition
     {
-      immutable(char)* name;
-      int returnType;
-      int parametersCount;
-      int* parametersTypes;
+        immutable(char)* name;
+        int returnType;
+        int parametersCount;
+        int* parametersTypes;
     }
 
     struct DosSlotDefinitions
     {
-      int count;
-      DosSlotDefinition* definitions;
+        int count;
+        DosSlotDefinition* definitions;
     }
 
     struct DosPropertyDefinition
     {
-      immutable(char)* name;
-      int type;
-      immutable(char)* readSlot;
-      immutable(char)* writeSlot;
-      immutable(char)* notifySignal;
+        immutable(char)* name;
+        int type;
+        immutable(char)* readSlot;
+        immutable(char)* writeSlot;
+        immutable(char)* notifySignal;
     }
 
     struct DosPropertyDefinitions
     {
-      int count;
-      DosPropertyDefinition* definitions;
+        int count;
+        DosPropertyDefinition* definitions;
     }
 
     void dos_qmetaobject_create(ref void*,
-                                       void* superclass,
-                                       immutable(char)* className,
-                                       DosSignalDefinitions signalDefinitions,
-                                       DosSlotDefinitions slotDefinitions,
-                                       DosPropertyDefinitions propertyDefinitions);
+                                void* superclass,
+                                immutable(char)* className,
+                                DosSignalDefinitions signalDefinitions,
+                                DosSlotDefinitions slotDefinitions,
+                                DosPropertyDefinitions propertyDefinitions);
     void dos_qmetaobject_delete(void*);
+
+    void dos_qdeclarative_qmlregistertype(immutable(char)* uri,
+                                          int major,
+                                          int minor,
+                                          immutable(char)* qmlName,
+                                          ref int result,
+                                          void* staticMetaObject,
+                                          void function(ref void*, ref void*),
+                                          void function(void*));
 }

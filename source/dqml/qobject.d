@@ -12,6 +12,7 @@ import dqml.qobjectgenerators;
 import dqml.dothersideinterface;
 import dqml.qmetatype;
 import dqml.qvariant;
+import core.memory;
 
 public class QObject
 {
@@ -27,9 +28,10 @@ public class QObject
         this.disableDosCalls = disableDosCalls;
         if (!this.disableDosCalls)
         {
-           dos_qobject_create(this.vptr, cast(void*)this,
-                              metaObject().voidPointer(),
-                              &staticSlotCallback);
+            GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
+            dos_qobject_create(this.vptr, cast(void*)this,
+                               metaObject().voidPointer(),
+                               &staticSlotCallback);
         }
     }
 
@@ -124,13 +126,6 @@ public class QObject
                                 length,
                                 array.ptr);
     }
-
-    protected extern (C) static void staticMetaObjectCallback(void* qObjectPtr, ref void* result)
-    {
-        QObject qObject = cast(QObject) qObjectPtr;
-        result = qObject.metaObject().voidPointer();
-    }
-
 
     protected extern (C) static void staticSlotCallback(void* qObjectPtr,
                                                         void* rawSlotName,

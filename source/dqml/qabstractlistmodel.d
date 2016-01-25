@@ -6,6 +6,7 @@ import dqml.qmodelindex;
 import dqml.qvariant;
 import dqml.qmetaobject;
 import std.string;
+import core.memory;
 
 class QAbstractListModel : QObject
 {
@@ -19,6 +20,7 @@ class QAbstractListModel : QObject
     this()
     {
         super(true);
+        GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
         dos_qabstractlistmodel_create(this.vptr, cast(void*)this,
                                       metaObject().voidPointer(),
                                       &staticSlotCallback,

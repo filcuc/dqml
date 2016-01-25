@@ -1,0 +1,11 @@
+{
+    "name": "qmlregistertype",
+    "description": "A minimal D application.",
+    "copyright": "Copyright © 2015, Filippo Cucchetto",
+    "authors": ["Filippo Cucchetto"],
+    "targetPath": "bin",
+    "copyFiles": ["source/app.qml"],
+    "dependencies": {
+        "dqml":{"version":"~master","path":"../../"}
+    }
+}
