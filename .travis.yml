@@ -20,7 +20,7 @@ install:
 - rm cmake-3.3.2-Linux-x86_64.tar.gz
 - echo "Installing DOtherSide"
 - git clone https://github.com/filcuc/DOtherSide.git DOtherSide
-- cd DOtherSide && mkdir build && cd build
+- cd DOtherSide && git checkout $TRAVIS_BRANCH && mkdir build && cd build
 - export CXX=g++-5
 - export CC=gcc-5
 - source /opt/qt55/bin/qt55-env.sh
@@ -44,4 +44,3 @@ script:
 - cd examples/helloworld && $DUB_EXECUTABLE build && cd -
 - cd examples/simpledata && $DUB_EXECUTABLE build && cd -
 - cd examples/slotsandproperties && $DUB_EXECUTABLE build && cd -
-
