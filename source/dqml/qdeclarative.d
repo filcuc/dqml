@@ -33,8 +33,15 @@ int qmlRegisterType(T)(string uri, int major, int minor, string qmlName) if (__t
     auto deleteFunction = &deleteSafeObject;
     auto staticMetaObject = T.staticMetaObject();
 
-    dos_qdeclarative_qmlregistertype(uri.toStringz(), major, minor, qmlName.toStringz(),
-                                     result, staticMetaObject.voidPointer(),
-                                     createFunction, deleteFunction);
+    DosQmlRegisterType args;
+    args.uri = uri.toStringz();
+    args.major = major;
+    args.minor = minor;
+    args.qml = qmlName.toStringz();
+    args.staticMetaObject = staticMetaObject.voidPointer();
+    args.createFunction = createFunction;
+    args.deleteFunction = deleteFunction;
+
+    dos_qdeclarative_qmlregistertype(args, result);
     return result;
 }

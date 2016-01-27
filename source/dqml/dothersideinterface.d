@@ -188,12 +188,18 @@ extern(C)
                                 DosPropertyDefinitions propertyDefinitions);
     void dos_qmetaobject_delete(void*);
 
-    void dos_qdeclarative_qmlregistertype(immutable(char)* uri,
-                                          int major,
-                                          int minor,
-                                          immutable(char)* qmlName,
-                                          ref int result,
-                                          void* staticMetaObject,
-                                          void function(ref void*, ref void*),
-                                          void function(void*));
+
+    struct DosQmlRegisterType
+    {
+      int major;
+      int minor;
+      immutable(char)* uri;
+      immutable(char)* qml;
+      void* staticMetaObject;
+      void function(ref void*, ref void*) createFunction;
+      void function(void*) deleteFunction;
+    }
+
+    void dos_qdeclarative_qmlregistertype(DosQmlRegisterType args, ref int result);
+
 }
