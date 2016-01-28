@@ -3,8 +3,13 @@
 
 QML binding for the D programming language
 
+# Supported features
+* Creation of custom QObjects
+* Creation of custom QAbstractListModels
+* Creation of QML instatiable QObjects
+
 # Requirements
-* [DOtherSide](https://github.com/filcuc/DOtherSide) 0.4.5 or higher
+* [DOtherSide](https://github.com/filcuc/DOtherSide) 0.5.0 or higher
 * [dmd](http://dlang.org/download.html#dmd) 2.065 or higher
 
 # Linux: build instructions
