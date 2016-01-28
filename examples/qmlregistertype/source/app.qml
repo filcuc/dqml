@@ -14,8 +14,8 @@ ApplicationWindow
     Contact {
         id: contact
         objectName: "contact"
-        firstName: "Filippo"
-        lastName: "Cucchetto"
+        firstName: "John"
+        lastName: "Doo"
     }
 
     Label { anchors.centerIn: parent; text: contact.firstName + " " + contact.lastName }
