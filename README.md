@@ -1,5 +1,5 @@
 # DQML
-[![Build Status](https://travis-ci.org/filcuc/dqml.svg?branch=master)](https://travis-ci.org/filcuc/DOtherSide)
+[![Build Status](https://travis-ci.org/filcuc/dqml.svg?branch=master)](https://travis-ci.org/filcuc/DQml)
 
 QML binding for the D programming language
 
