@@ -8,7 +8,6 @@ before_install:
 - sudo apt-get update
 
 install:
-- export PROJECT_DIR=`pwd`
 - echo "Installing Qt and GCC"
 - sudo apt-get -y install qt-latest gcc-5 g++-5
 - echo "Moving to /tmp"
@@ -36,14 +35,13 @@ install:
 - wget http://code.dlang.org/files/dub-0.9.24-linux-x86_64.tar.gz
 - tar xf dub*.gz
 - export DUB_EXECUTABLE=/tmp/dub
-- cd $PROJECT_DIR
 
 script:
-- cd examples/abstractitemmodel && $DUB_EXECUTABLE build && cd -
-- cd examples/contactapp && $DUB_EXECUTABLE build && cd -
-- cd examples/helloworld && $DUB_EXECUTABLE build && cd -
-- cd examples/simpledata && $DUB_EXECUTABLE build && cd -
-- cd examples/slotsandproperties && $DUB_EXECUTABLE build && cd -
-- cd examples/receivesignals && $DUB_EXECUTABLE build && cd -
-- cd examples/resourcebundling && $DUB_EXECUTABLE build && cd -
-- cd examples/qmlregistertype && $DUB_EXECUTABLE build && cd -
+- cd $TRAVIS_BUILD_DIR/examples/abstractitemmodel && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/contactapp && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/helloworld && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/simpledata && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/slotsandproperties && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/receivesignals && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/resourcebundling && $DUB_EXECUTABLE build
+- cd $TRAVIS_BUILD_DIR/examples/qmlregistertype && $DUB_EXECUTABLE build
