@@ -64,14 +64,6 @@ public class QObject
         return result;
     }
 
-    public QObject findChild(string name, FindChildOptions options = FindChildOptions.Recursively)
-    {
-        void* child;
-        dos_qobject_findChild(this.vptr, name.toStringz, options, child);
-        if (child is null) return null;
-        return new QObject(child);
-    }
-
     public static QMetaObject staticMetaObject()
     {
         return m_staticMetaObject;

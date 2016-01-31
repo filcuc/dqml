@@ -23,7 +23,6 @@ extern(C)
     void dos_qqmlapplicationengine_load_url(void*, void*);
     void dos_qqmlapplicationengine_add_import_path(void* vptr, immutable (char)* path);
     void dos_qqmlapplicationengine_context(void*, ref void*);
-    void dos_qqmlapplicationengine_rootObjects(void* vptr, ref void** array, ref int array_length);
     void dos_qqmlapplicationengine_delete(void*);
 
     // QQuickView
@@ -38,9 +37,6 @@ extern(C)
 
     // CharArray
     void dos_chararray_delete(char*);
-
-    // QObjectPtrArray
-    void dos_qobjectptr_array_delete(void** ptr);
 
     // QQmlContext
     void dos_qqmlcontext_baseUrl(void*, ref char*);
@@ -89,7 +85,6 @@ extern(C)
                                        immutable(char)*,
                                        ref bool);
     void dos_qobject_objectName(void*, ref char*);
-    void dos_qobject_findChild(void*, immutable(char)*, int, ref void*);
     void dos_qobject_delete(void*);
 
     // QModelIndex
