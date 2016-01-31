@@ -44,3 +44,6 @@ script:
 - cd examples/helloworld && $DUB_EXECUTABLE build && cd -
 - cd examples/simpledata && $DUB_EXECUTABLE build && cd -
 - cd examples/slotsandproperties && $DUB_EXECUTABLE build && cd -
+- cd examples/receivesignals && $DUB_EXECUTABLE build && cd -
+- cd examples/resourcebundling && $DUB_EXECUTABLE build && cd -
+- cd examples/qmlregistertype && $DUB_EXECUTABLE build && cd -

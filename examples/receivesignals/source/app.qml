@@ -1,11 +1,9 @@
-
 import QtQuick 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
-ApplicationWindow
-{
+ApplicationWindow {
     id: main
 
     width: 400
@@ -20,16 +18,13 @@ ApplicationWindow
         receiver.register(main)
     }
 
-    Column
-    {
+    Column {
         width: parent.width
 
-        Row
-        {
+        Row {
             width: parent.width
 
-            TextField
-            {
+            TextField {
                 id: message
 
                 width: parent.width - 200
@@ -37,8 +32,7 @@ ApplicationWindow
                 placeholderText: qsTr("Message")
             }
 
-            Button
-            {
+            Button {
                 width: 200
 
                 text: qsTr("Broadcast message")
@@ -46,8 +40,7 @@ ApplicationWindow
             }
         }
 
-        Button
-        {
+        Button {
             id: controller
 
             onClicked: {
@@ -57,18 +50,16 @@ ApplicationWindow
 
             state: "Silent"
             states: [
-            State
-            {
-                name: "Silent"
-                PropertyChanges { target: controller; text: qsTr("Start broadcasting numbers") }
-                StateChangeScript { script: numberBroadcaster.stop() }
-            },
-            State
-            {
-                name: "Broadcasting"
-                PropertyChanges { target: controller; text: qsTr("Stop broadcasting numbers") }
-                StateChangeScript { script: numberBroadcaster.start() }
-            }
+                State {
+                    name: "Silent"
+                    PropertyChanges { target: controller; text: qsTr("Start broadcasting numbers") }
+                    StateChangeScript { script: numberBroadcaster.stop() }
+                },
+                State {
+                    name: "Broadcasting"
+                    PropertyChanges { target: controller; text: qsTr("Stop broadcasting numbers") }
+                    StateChangeScript { script: numberBroadcaster.start() }
+                }
             ]
         }
     }

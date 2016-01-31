@@ -6,7 +6,6 @@ void main()
 	auto application = new QApplication;
 	scope(exit) destroy(application);
 
-
 	auto receiver = new Receiver;
 	scope(exit) destroy(receiver);
 
@@ -21,7 +20,6 @@ void main()
 
 	receiver.register(numberBroadcaster);
 
-
 	auto engine = new QQmlApplicationEngine;
 	scope (exit) destroy(engine);
 	engine.rootContext.setContextProperty("receiver", receiverVariant);
@@ -33,14 +31,12 @@ void main()
 
 class Receiver : QObject
 {
-	mixin InjectQObjectMacro;
-	mixin(Q_OBJECT!Receiver);
+    mixin Q_OBJECT;
 
 private:
 	import std.stdio;
 
 public:
-
 	@QtSlot()
 	void register(QObject sender)
 	{
@@ -56,8 +52,7 @@ public:
 
 class NumberBroadcaster : QObject
 {
-	mixin InjectQObjectMacro;
-	mixin(Q_OBJECT!NumberBroadcaster);
+    mixin Q_OBJECT;
 
 private:
 	import core.atomic : cas, atomicLoad;
