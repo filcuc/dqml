@@ -7,4 +7,4 @@ dependency "dqml" path="../../"
 
 targetPath "bin"
 
-postBuildCommands "qtchooser -qt=5 -run-tool=rcc -binary source/app.qrc -o bin/app.rcc"
+postBuildCommands "rcc -binary source/app.qrc -o bin/app.rcc"
