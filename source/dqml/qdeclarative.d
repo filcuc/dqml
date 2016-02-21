@@ -11,7 +11,7 @@ QObject createObject(T)()
     return new T();
 }
 
-extern(C) void createSafeObject(T)(ref void* dObject, ref void* cppObject)
+extern(C) void createSafeObject(T)(int id, ref void* dObject, ref void* cppObject)
 {
     QObject object = createObject!T();
     dObject = cast(void*)(object);
@@ -20,7 +20,7 @@ extern(C) void createSafeObject(T)(ref void* dObject, ref void* cppObject)
     GC.setAttr(dObject, GC.BlkAttr.NO_MOVE);
 }
 
-extern(C) void deleteSafeObject(void* object)
+extern(C) void deleteSafeObject(int id, void* object)
 {
     GC.removeRoot(object);
     GC.clrAttr(object, GC.BlkAttr.NO_MOVE);

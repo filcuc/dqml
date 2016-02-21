@@ -191,10 +191,10 @@ extern(C)
       immutable(char)* uri;
       immutable(char)* qml;
       void* staticMetaObject;
-      void function(ref void*, ref void*) createFunction;
-      void function(void*) deleteFunction;
+      void function(int, ref void*, ref void*) createFunction;
+      void function(int, void*) deleteFunction;
     }
 
-    void dos_qdeclarative_qmlregistertype(DosQmlRegisterType args, ref int result);
+    void dos_qdeclarative_qmlregistertype(ref DosQmlRegisterType args, ref int result);
 
 }
