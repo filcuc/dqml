@@ -195,6 +195,6 @@ extern(C)
       void function(int, void*) deleteFunction;
     }
 
-    void dos_qdeclarative_qmlregistertype(ref DosQmlRegisterType args, ref int result);
+    void dos_qdeclarative_qmlregistertype(const ref DosQmlRegisterType args, ref int result);
 
 }
