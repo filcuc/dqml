@@ -178,9 +178,9 @@ extern(C)
     void dos_qmetaobject_create(ref void*,
                                 void* superclass,
                                 immutable(char)* className,
-                                DosSignalDefinitions signalDefinitions,
-                                DosSlotDefinitions slotDefinitions,
-                                DosPropertyDefinitions propertyDefinitions);
+                                const ref DosSignalDefinitions signalDefinitions,
+                                const ref DosSlotDefinitions slotDefinitions,
+                                const ref DosPropertyDefinitions propertyDefinitions);
     void dos_qmetaobject_delete(void*);
 
 
