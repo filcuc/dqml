@@ -50,6 +50,7 @@ extern(C)
     void dos_qvariant_create_qobject(ref void*, void*);
     void dos_qvariant_create_float(ref void*, float);
     void dos_qvariant_create_double(ref void*, double);
+    void dos_qvariant_create_qvariant(ref void*, void*);
     void dos_qvariant_toInt(void*, ref int);
     void dos_qvariant_setInt(void*, int);
     void dos_qvariant_toBool(void*, ref bool);
@@ -89,6 +90,7 @@ extern(C)
 
     // QModelIndex
     void dos_qmodelindex_create(ref void* index);
+    void dos_qmodelindex_create_qmodelindex(ref void* index, void* other);
     void dos_qmodelindex_delete(void* index);
     void dos_qmodelindex_row(void*, ref int result);
     void dos_qmodelindex_column(void*, ref int result);

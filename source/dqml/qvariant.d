@@ -42,8 +42,7 @@ class QVariant
 
     public this(void* vptr)
     {
-        this();
-        dos_qvariant_assign(this.vptr, vptr);
+        dos_qvariant_create_qvariant(this.vptr, vptr);
     }
 
     ~this()

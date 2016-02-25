@@ -11,8 +11,7 @@ class QModelIndex
 
     this(void* vptr)
     {
-        this();
-        dos_qmodelindex_assign(this.vptr, vptr);
+        dos_qmodelindex_create_qmodelindex(this.vptr, vptr);
     }
 
     ~this()
