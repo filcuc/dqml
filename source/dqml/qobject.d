@@ -124,6 +124,7 @@ public class QObject
         QObject qObject = cast(QObject) qObjectPtr;
         QVariant slotName = new QVariant(rawSlotName);
         qObject.onSlotCalled(slotName, parameters);
+        dos_qvariant_assign(parametersArray[0], parameters[0].voidPointer());
     }
 
     protected static bool connect(QObject sender,
