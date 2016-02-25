@@ -97,6 +97,7 @@ extern(C)
     void dos_qmodelindex_parent(void* index, void* parent);
     void dos_qmodelindex_child(void* index, int r, int c, void* child);
     void dos_qmodelindex_sibling(void* index, int r, int c, void* sibling);
+    void dos_qmodelindex_assign(void* leftSide, void* rightSide);
 
     // QHashIntByteArray
     void dos_qhash_int_qbytearray_create(ref void*);
@@ -196,5 +197,5 @@ extern(C)
     }
 
     void dos_qdeclarative_qmlregistertype(const ref DosQmlRegisterType args, ref int result);
-
+    void dos_qdeclarative_qmlregistersingletontype(const ref DosQmlRegisterType args, ref int result);
 }

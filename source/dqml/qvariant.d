@@ -40,16 +40,15 @@ class QVariant
         dos_qvariant_create_qobject(this.vptr, value.voidPointer());
     }
 
-    public this(void* vptr, bool hasOwnership = false)
+    public this(void* vptr)
     {
-        this.vptr = vptr;
-        this.hasOwnership = hasOwnership;
+        this();
+        dos_qvariant_assign(this.vptr, vptr);
     }
 
     ~this()
     {
-        if (this.hasOwnership)
-            dos_qvariant_delete(this.vptr);
+        dos_qvariant_delete(this.vptr);
     }
 
     public void* voidPointer()
@@ -157,5 +156,4 @@ class QVariant
     }
 
     private void* vptr = null;
-    private bool hasOwnership = true;
 }
