@@ -35,12 +35,6 @@ public class QObject
         }
     }
 
-    public this(void* vptr)
-    {
-        this.vptr = vptr;
-        this(true);
-    }
-
     ~this()
     {
         if (!this.disableDosCalls)

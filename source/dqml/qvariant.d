@@ -102,11 +102,6 @@ class QVariant
         value = toString();
     }
 
-    public void getValue(ref QObject value)
-    {
-        value = toQObject();
-    }
-
     public void getValue(ref float value)
     {
         value = toFloat();
@@ -159,13 +154,6 @@ class QVariant
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;
-    }
-
-    public QObject toQObject()
-    {
-        void* qobject;
-        dos_qvariant_toQObject(this.vptr, qobject);
-        return new QObject(qobject);
     }
 
     private void* vptr = null;
