@@ -35,7 +35,7 @@ class QAbstractListModel : QObject
 
     ~this()
     {
-        dos_qabstractlistmodel_delete(this.vptr);
+        dos_qobject_delete(this.vptr);
     }
 
     public static QMetaObject staticMetaObject() {
