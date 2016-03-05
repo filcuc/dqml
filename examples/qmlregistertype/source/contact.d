@@ -1,7 +1,7 @@
 import dqml;
 
-@QtProperty(string.stringof, "firstName", "getFirstName", "setFirstName", "firstNameChanged")
-@QtProperty(string.stringof, "lastName", "getLastName", "setLastName", "lastNameChanged")
+@QtProperty!string("firstName", "getFirstName", "setFirstName", "firstNameChanged")
+@QtProperty!string("lastName", "getLastName", "setLastName", "lastNameChanged")
 class Contact : QObject
 {
     mixin Q_OBJECT;

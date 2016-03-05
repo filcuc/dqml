@@ -2,7 +2,7 @@ import dqml;
 import contactlist;
 import std.stdio;
 
-@QtProperty(QObject.stringof, "contactList", "contactList", null, null)
+@QtProperty!QObject("contactList", "contactList", null, null)
 class ApplicationLogic : QObject
 {
     mixin Q_OBJECT;

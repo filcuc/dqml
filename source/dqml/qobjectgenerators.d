@@ -5,21 +5,26 @@ import std.algorithm;
 import std.string;
 import std.stdio;
 
-struct QtProperty
+struct QtPropertyData
 {
     public string type;
     public string name;
     public string read;
     public string write;
     public string notify;
+}
 
-    this(string type, string name, string read, string write, string notify)
+struct QtProperty(T)
+{
+    public QtPropertyData data;
+
+    this(string name, string read, string write, string notify)
     {
-        this.type = type;
-        this.name = name;
-        this.read = read;
-        this.write = write;
-        this.notify = notify;
+        data.type = T.stringof;
+        data.name = name;
+        data.read = read;
+        data.write = write;
+        data.notify = notify;
     }
 }
 
@@ -176,17 +181,15 @@ struct QtInfo
 {
     FunctionInfo[] slots;
     FunctionInfo[] signals;
-    QtProperty[] properties;
+    QtPropertyData[] properties;
 }
 
 public static QtInfo GetQtUDA(T)()
 {
     QtInfo result;
 
-    foreach (attribute; __traits(getAttributes, T)) {
-        static if (is (typeof(attribute) == QtProperty)) {
-            result.properties ~= attribute;
-        }
+    foreach (property; getUDAs!(T, QtProperty)) {
+        result.properties ~= property.data;
     }
 
     foreach (member; __traits(derivedMembers, T)) {
@@ -249,7 +252,7 @@ public static string GenerateMetaObject(string qobjectSuperClassName, QtInfo inf
         result ~= format("  slots ~= SlotDefinition(\"%s\", %s, [%s]);\n", slot.name, returnType, parameters);
     }
 
-    foreach(QtProperty property; info.properties) {
+    foreach(QtPropertyData property; info.properties) {
         string name = property.name;
         string type = GenerateMetaType(property.type);
         string read = property.read;
