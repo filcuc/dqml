@@ -75,5 +75,5 @@ class ContactList : QAbstractListModel
 
     private Contact[] m_contacts;
     private string[int] m_roleNames;
-    private enum Roles : int { FirstName = 0, LastName};
+    private enum Roles : int { FirstName = UserRole + 1, LastName};
 }

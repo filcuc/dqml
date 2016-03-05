@@ -21,13 +21,13 @@ class ListModel : QAbstractListModel
     {
         if (index is null)
             return null;
-        
+
         if (!index.isValid())
             return null;
-        
+
         if (index.row() < 0 || index.row() >= rowCount())
             return null;
-        
+
         switch(role)
         {
         case Roles.Name:
@@ -44,5 +44,5 @@ class ListModel : QAbstractListModel
 
     private string[] names;
     private string[int] roles;
-    private enum Roles : int { Name = 0 };
+    private enum Roles : int { Name = UserRole + 1 };
 }

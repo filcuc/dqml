@@ -1,5 +1,6 @@
 module dqml;
 
+public import dqml.qt;
 public import dqml.qvariant;
 public import dqml.qguiapplication;
 public import dqml.qapplication;
