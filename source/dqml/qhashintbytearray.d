@@ -1,4 +1,5 @@
 module dqml.qhashintbytearray;
+
 import dqml.dothersideinterface;
 import dqml.qvariant;
 import std.string;
@@ -7,7 +8,7 @@ class QHashIntByteArray
 {
     this()
     {
-        dos_qhash_int_qbytearray_create(this.vptr);
+        this.vptr = dos_qhash_int_qbytearray_create();
     }
 
     this(void* vptr)
@@ -32,8 +33,7 @@ class QHashIntByteArray
 
     public string value(int key)
     {
-        char* array;
-        dos_qhash_int_qbytearray_value(this.vptr, key, array);
+        char* array = dos_qhash_int_qbytearray_value(this.vptr, key);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;

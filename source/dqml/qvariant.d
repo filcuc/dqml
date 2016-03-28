@@ -1,4 +1,6 @@
 module dqml.qvariant;
+
+import dqml.global;
 import dqml.dothersideinterface;
 import dqml.qobject;
 import std.string;
@@ -7,42 +9,42 @@ class QVariant
 {
     public this()
     {
-        dos_qvariant_create(this.vptr);
+        this.vptr = dos_qvariant_create();
     }
 
     public this(int value)
     {
-        dos_qvariant_create_int(this.vptr, value);
+        this.vptr = dos_qvariant_create_int(value);
     }
 
     public this(bool value)
     {
-        dos_qvariant_create_bool(this.vptr, value);
+        this.vptr = dos_qvariant_create_bool(value);
     }
 
     public this(string value)
     {
-        dos_qvariant_create_string(this.vptr, value.toStringz());
+        this.vptr = dos_qvariant_create_string(value.toStringz());
     }
 
     public this(float value)
     {
-        dos_qvariant_create_float(this.vptr, value);
+        this.vptr = dos_qvariant_create_float(value);
     }
 
     public this(double value)
     {
-        dos_qvariant_create_double(this.vptr, value);
+        this.vptr = dos_qvariant_create_double(value);
     }
 
     public this(QObject value)
     {
-        dos_qvariant_create_qobject(this.vptr, value.voidPointer());
+        this.vptr = dos_qvariant_create_qobject(value.voidPointer());
     }
 
-    public this(void* vptr)
+    public this(void* vptr, Ownership ownership)
     {
-        dos_qvariant_create_qvariant(this.vptr, vptr);
+        this.vptr = ownership == Ownership.Take ? vptr : dos_qvariant_create_qvariant(vptr);
     }
 
     ~this()
@@ -110,45 +112,34 @@ class QVariant
         value = toDouble();
     }
 
-    public  bool isNull()
+    public bool isNull()
     {
-        bool result;
-        dos_qvariant_isnull(this.vptr, result);
-        return result;
+        return dos_qvariant_isnull(this.vptr);
     }
 
-    public  bool toBool()
+    public bool toBool()
     {
-        bool result;
-        dos_qvariant_toBool(this.vptr, result);
-        return result;
+        return dos_qvariant_toBool(this.vptr);
     }
 
     public int toInt()
     {
-        int result;
-        dos_qvariant_toInt(this.vptr, result);
-        return result;
+        return dos_qvariant_toInt(this.vptr);
     }
 
     public float toFloat()
     {
-        float result;
-        dos_qvariant_toFloat(this.vptr, result);
-        return result;
+        return dos_qvariant_toFloat(this.vptr);
     }
 
     public double toDouble()
     {
-        double result;
-        dos_qvariant_toDouble(this.vptr, result);
-        return result;
+        return dos_qvariant_toDouble(this.vptr);
     }
 
     public override string toString()
     {
-        char* array;
-        dos_qvariant_toString(this.vptr, array);
+        char* array = dos_qvariant_toString(this.vptr);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;

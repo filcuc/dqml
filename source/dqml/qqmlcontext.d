@@ -1,4 +1,5 @@
 module dqml.qqmlcontext;
+
 import dqml.dothersideinterface;
 import dqml.qvariant;
 import std.string;
@@ -17,8 +18,7 @@ class QQmlContext
 
     public string baseUrl()
     {
-        char* array;
-        dos_qqmlcontext_baseUrl(this.vptr, array);
+        char* array = dos_qqmlcontext_baseUrl(this.vptr);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;

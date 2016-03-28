@@ -1,4 +1,5 @@
 module dqml.qmetatype;
+
 import dqml.qobject;
 import dqml.qvariant;
 

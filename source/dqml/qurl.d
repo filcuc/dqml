@@ -1,4 +1,5 @@
 module dqml.qurl;
+
 import dqml.dothersideinterface;
 import std.string;
 
@@ -6,7 +7,7 @@ class QUrl
 {
     this(string url, ParsingMode parsingMode = ParsingMode.TolerantMode)
     {
-        dos_qurl_create(this.vptr, url.toStringz(), parsingMode);
+        this.vptr = dos_qurl_create(url.toStringz(), parsingMode);
     }
 
     ~this()
@@ -28,8 +29,7 @@ class QUrl
 
     override string toString()
     {
-        char* array;
-        dos_qurl_to_string(vptr, array);
+        char* array = dos_qurl_to_string(vptr);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;

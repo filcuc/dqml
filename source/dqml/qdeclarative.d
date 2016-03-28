@@ -1,4 +1,5 @@
 module dqml.qdeclarative;
+
 import dqml.dothersideinterface;
 import dqml.qobject;
 import std.string;

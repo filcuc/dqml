@@ -1,4 +1,5 @@
 module dqml.qqmlapplicationengine;
+
 import dqml.dothersideinterface;
 import dqml.qqmlcontext;
 import dqml.qurl;
@@ -9,7 +10,7 @@ class QQmlApplicationEngine
 {
     this()
     {
-        dos_qqmlapplicationengine_create(this.vptr);
+        this.vptr = dos_qqmlapplicationengine_create();
     }
 
     ~this()
@@ -24,8 +25,7 @@ class QQmlApplicationEngine
 
     public QQmlContext rootContext()
     {
-        void* contextVPtr;
-        dos_qqmlapplicationengine_context(this.vptr, contextVPtr);
+        void* contextVPtr = dos_qqmlapplicationengine_context(this.vptr);
         return new QQmlContext(contextVPtr);
     }
 

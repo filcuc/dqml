@@ -1,4 +1,5 @@
 module dqml.qmetaobject;
+
 import dqml.dothersideinterface;
 import dqml.qmetatype;
 import std.string;
@@ -79,12 +80,11 @@ public class QMetaObject
         dosPropertyDefinitions.count = cast(int) propertyDefinitionsArray.length;
         dosPropertyDefinitions.definitions = propertyDefinitionsArray.ptr;
 
-        dos_qmetaobject_create(this.vptr,
-                               superClass.vptr,
-                               className.toStringz(),
-                               dosSignalDefinitions,
-                               dosSlotDefinitions,
-                               dosPropertyDefinitions);
+        this.vptr = dos_qmetaobject_create(superClass.vptr,
+                                           className.toStringz(),
+                                           dosSignalDefinitions,
+                                           dosSlotDefinitions,
+                                           dosPropertyDefinitions);
     }
 
     public ~this()

@@ -1,5 +1,6 @@
 module dqml.qobject;
 
+import dqml.global;
 import std.stdio;
 import std.format;
 import std.conv;
@@ -18,9 +19,7 @@ public class QObject
 {
     shared static this()
     {
-        void* vptr;
-        dos_qobject_qmetaobject(vptr);
-        m_staticMetaObject = new QMetaObject(vptr);
+        m_staticMetaObject = new QMetaObject(dos_qobject_qmetaobject());
     }
 
     public this(bool disableDosCalls = false)
@@ -29,9 +28,9 @@ public class QObject
         if (!this.disableDosCalls)
         {
             GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
-            dos_qobject_create(this.vptr, cast(void*)this,
-                               metaObject().voidPointer(),
-                               &staticSlotCallback);
+            this.vptr = dos_qobject_create(cast(void*)this,
+                                           metaObject().voidPointer(),
+                                           &staticSlotCallback);
         }
     }
 
@@ -51,8 +50,7 @@ public class QObject
 
     @property public string objectName()
     {
-        char* array;
-        dos_qobject_objectName(this.vptr, array);
+        char* array = dos_qobject_objectName(this.vptr);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;
@@ -120,9 +118,9 @@ public class QObject
     {
         QVariant[] parameters = new QVariant[numParameters];
         for (int i = 0; i < numParameters; ++i)
-            parameters[i] = new QVariant(parametersArray[i]);
+            parameters[i] = new QVariant(parametersArray[i], Ownership.Clone);
         QObject qObject = cast(QObject) qObjectPtr;
-        QVariant slotName = new QVariant(rawSlotName);
+        QVariant slotName = new QVariant(rawSlotName, Ownership.Clone);
         qObject.onSlotCalled(slotName, parameters);
         dos_qvariant_assign(parametersArray[0], parameters[0].voidPointer());
     }
@@ -133,14 +131,12 @@ public class QObject
                                   string method,
                                   ConnectionType type = ConnectionType.Auto)
     {
-        bool result;
-        dos_qobject_signal_connect(sender.voidPointer,
-                                   signal.toStringz,
-                                   receiver.voidPointer,
-                                   method.toStringz,
-                                   type,
-                                   result);
-        return result;
+        return dos_qobject_signal_connect(sender.voidPointer,
+                                          signal.toStringz,
+                                          receiver.voidPointer,
+                                          method.toStringz,
+                                          type);
+
     }
 
     protected static bool disconnect(QObject sender,
@@ -148,13 +144,10 @@ public class QObject
                                      QObject receiver,
                                      string method)
     {
-        bool result;
-        dos_qobject_signal_disconnect(sender.voidPointer,
-                                      signal.toStringz,
-                                      receiver.voidPointer,
-                                      method.toStringz,
-                                      result);
-        return result;
+        return dos_qobject_signal_disconnect(sender.voidPointer,
+                                             signal.toStringz,
+                                             receiver.voidPointer,
+                                             method.toStringz);
     }
 
     template connect(alias slot)

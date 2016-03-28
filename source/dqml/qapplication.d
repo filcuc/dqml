@@ -1,4 +1,5 @@
 module dqml.qapplication;
+
 import dqml.dothersideinterface;
 import dqml.qcoreapplication;
 import std.string;

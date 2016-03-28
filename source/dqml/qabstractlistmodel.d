@@ -1,5 +1,6 @@
 module dqml.qabstractlistmodel;
 
+import dqml.global;
 import dqml.dothersideinterface;
 import dqml.qobject;
 import dqml.qmodelindex;
@@ -12,25 +13,23 @@ class QAbstractListModel : QObject
 {
     shared static this()
     {
-        void* vptr;
-        dos_qabstractlistmodel_qmetaobject(vptr);
-        m_staticMetaObject = new QMetaObject(vptr);
+        m_staticMetaObject = new QMetaObject(dos_qabstractlistmodel_qmetaobject());
     }
 
     this()
     {
         super(true);
         GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
-        dos_qabstractlistmodel_create(this.vptr, cast(void*)this,
-                                      metaObject().voidPointer(),
-                                      &staticSlotCallback,
-                                      &rowCountCallback,
-                                      &columnCountCallback,
-                                      &dataCallback,
-                                      &setDataCallback,
-                                      &roleNamesCallback,
-                                      &flagsCallback,
-                                      &headerDataCallback);
+        this.vptr = dos_qabstractlistmodel_create(cast(void*)this,
+                                                  metaObject().voidPointer(),
+                                                  &staticSlotCallback,
+                                                  &rowCountCallback,
+                                                  &columnCountCallback,
+                                                  &dataCallback,
+                                                  &setDataCallback,
+                                                  &roleNamesCallback,
+                                                  &flagsCallback,
+                                                  &headerDataCallback);
     }
 
     ~this()
@@ -132,7 +131,7 @@ class QAbstractListModel : QObject
                                                     ref int result)
     {
         auto model = cast(QAbstractListModel)(modelPtr);
-        auto index = new QModelIndex(indexPtr);
+        auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.rowCount(index);
     }
 
@@ -141,7 +140,7 @@ class QAbstractListModel : QObject
                                                        ref int result)
     {
         auto model = cast(QAbstractListModel)(modelPtr);
-        auto index = new QModelIndex(indexPtr);
+        auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.columnCount(index);
     }
 
@@ -151,7 +150,7 @@ class QAbstractListModel : QObject
                                                 void* result)
     {
         auto model = cast(QAbstractListModel)(modelPtr);
-        auto index = new QModelIndex(indexPtr);
+        auto index = new QModelIndex(indexPtr, Ownership.Clone);
         auto value = model.data(index, role);
         if (value is null)
             return;
@@ -165,8 +164,8 @@ class QAbstractListModel : QObject
                                                    ref bool result)
     {
         auto model = cast(QAbstractListModel)(modelPtr);
-        auto index = new QModelIndex(indexPtr);
-        auto value = new QVariant(valuePtr);
+        auto index = new QModelIndex(indexPtr, Ownership.Clone);
+        auto value = new QVariant(valuePtr, Ownership.Clone);
         result = model.setData(index, value, role);
     }
 
@@ -185,7 +184,7 @@ class QAbstractListModel : QObject
                                                  ref int result)
     {
         auto model = cast(QAbstractListModel)(modelPtr);
-        auto index = new QModelIndex(indexPtr);
+        auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.flags(index);
     }
 

@@ -1,4 +1,5 @@
 module dqml.qquickview;
+
 import dqml.dothersideinterface;
 import dqml.qqmlcontext;
 import dqml.qurl;
@@ -8,7 +9,7 @@ class QQuickView
 {
     this()
     {
-        dos_qquickview_create(this.vptr);
+        this.vptr = dos_qquickview_create();
     }
 
     ~this()
@@ -28,15 +29,13 @@ class QQuickView
 
     public QQmlContext rootContext()
     {
-        void* contextData;
-        dos_qquickview_rootContext(this.vptr, contextData);
+        void* contextData = dos_qquickview_rootContext(this.vptr);
         return new QQmlContext(contextData);
     }
 
     public string source()
     {
-        char* array;
-        dos_qquickview_source(this.vptr, array);
+        char* array = dos_qquickview_source(this.vptr);
         string result = fromStringz(array).dup;
         dos_chararray_delete(array);
         return result;

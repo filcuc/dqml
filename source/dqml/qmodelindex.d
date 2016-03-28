@@ -1,17 +1,20 @@
 module dqml.qmodelindex;
+
+import dqml.global;
 import dqml.dothersideinterface;
 import dqml.qvariant;
+
 
 class QModelIndex
 {
     this()
     {
-        dos_qmodelindex_create(this.vptr);
+        this.vptr = dos_qmodelindex_create();
     }
 
-    this(void* vptr)
+    this(void* vptr, Ownership ownership)
     {
-        dos_qmodelindex_create_qmodelindex(this.vptr, vptr);
+        this.vptr = ownership == Ownership.Take ? vptr :  dos_qmodelindex_create_qmodelindex(vptr);
     }
 
     ~this()
@@ -26,51 +29,41 @@ class QModelIndex
 
     public int row()
     {
-        int result = -1;
-        dos_qmodelindex_row(this.vptr, result);
-        return result;
+        return dos_qmodelindex_row(this.vptr);
     }
 
     public int column()
     {
-        int result = -1;
-        dos_qmodelindex_column(this.vptr, result);
-        return result;
+        return dos_qmodelindex_column(this.vptr);
     }
 
     public bool isValid()
     {
-        bool result = false;
-        dos_qmodelindex_isValid(this.vptr, result);
-        return result;
+        return dos_qmodelindex_isValid(this.vptr);
     }
 
     public QVariant data(int role)
     {
-        auto result = new QVariant();
-        dos_qmodelindex_data(this.vptr, role, result.voidPointer());
-        return result;
+        void* data = dos_qmodelindex_data(this.vptr, role);
+        return new QVariant(data, Ownership.Take);
     }
 
     public QModelIndex parent()
     {
-        auto result = new QModelIndex();
-        dos_qmodelindex_parent(this.vptr, result.vptr);
-        return result;
+        void* parent = dos_qmodelindex_parent(this.vptr);
+        return new QModelIndex(parent, Ownership.Take);
     }
 
     public QModelIndex child(int row, int column)
     {
-        auto result = new QModelIndex();
-        dos_qmodelindex_child(this.vptr, row, column, result.vptr);
-        return result;
+        void* child = dos_qmodelindex_child(this.vptr, row, column);
+        return new QModelIndex(child, Ownership.Take);
     }
 
     public QModelIndex sibling(int row, int column)
     {
-        auto result = new QModelIndex();
-        dos_qmodelindex_sibling(this.vptr, row, column, result.vptr);
-        return result;
+        void* sibling = dos_qmodelindex_sibling(this.vptr, row, column);
+        return new QModelIndex(sibling, Ownership.Take);
     }
 
     private void* vptr = null;

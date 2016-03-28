@@ -1,4 +1,5 @@
 module dqml.qresource;
+
 import dqml.dothersideinterface;
 import std.string;
 
