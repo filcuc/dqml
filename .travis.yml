@@ -28,7 +28,7 @@ install:
 - sudo make install
 - cd /tmp && rm -rf DOtherSide
 - echo "Installing dmd"
-- wget http://downloads.dlang.org/releases/2.x/2.069.2/dmd_2.069.2-0_amd64.deb
+- wget http://downloads.dlang.org/releases/2.x/2.071.0/dmd_2.071.0-0_amd64.deb
 - sudo dpkg -i dmd*.deb
 - rm dmd*.deb
 - echo "Installing dub"
