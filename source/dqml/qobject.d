@@ -48,6 +48,16 @@ public class QObject
         return this.vptr;
     }
 
+    public void setVoidPointer(void* vptr)
+    {
+        this.vptr = vptr;
+    }
+
+    public void setDisableDosCalls(bool value)
+    {
+        this.disableDosCalls = value;
+    }
+
     @property public string objectName()
     {
         char* array = dos_qobject_objectName(this.vptr);

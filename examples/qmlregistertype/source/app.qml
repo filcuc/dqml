@@ -4,21 +4,32 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 import ContactModule 1.0
 
-
-ApplicationWindow
-{
+ApplicationWindow {
     width: 400
     height: 300
-    title: "Hello World"
+    title: "qmlregistertype"
+
+    Component.onCompleted: visible = true
 
     Contact {
         id: contact
-        objectName: "contact"
         firstName: "John"
         lastName: "Doo"
     }
 
-    Label { anchors.centerIn: parent; text: contact.firstName + " " + contact.lastName }
+    Label {
+        anchors.centerIn: parent;
+        text: contact.firstName + " " + contact.lastName
+    }
 
-    Component.onCompleted: visible = true
+    RowLayout {
+        anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+        Item { Layout.fillWidth: true }
+        Label { text: "FirstName:" }
+        TextField { onEditingFinished: contact.firstName = text }
+        Item { width: 30 }
+        Label { text: "LastName: " }
+        TextField { onEditingFinished: contact.lastName = text }
+        Item { Layout.fillWidth: true }
+    }
 }

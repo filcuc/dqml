@@ -192,7 +192,7 @@ extern(C)
       immutable(char)* uri;
       immutable(char)* qml;
       void* staticMetaObject;
-      void function(int, ref void*, ref void*) createFunction;
+      void function(int, void*, ref void*, ref void*) createFunction;
       void function(int, void*) deleteFunction;
     }
 
