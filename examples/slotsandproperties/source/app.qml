@@ -6,8 +6,8 @@ import QtQuick.Window 2.1
 ApplicationWindow {
     width: 400
     height: 300
-    visible: true
 
+    Component.onCompleted: visible = true
 
     ColumnLayout {
         anchors.fill: parent
