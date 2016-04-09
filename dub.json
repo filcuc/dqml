@@ -3,7 +3,7 @@
     "description": "Qml bindings for both D and Nim programming languages.",
     "targetType": "sourceLibrary",
     "homepage": "http://github.com/filcuc/dqml",
-    "copyright": "Copyright © 2014-2015 Filippo Cucchetto",
+    "copyright": "Copyright © 2015-2016 Filippo Cucchetto",
     "authors": ["Filippo Cucchetto"],
     "license": "LGPLv3",
     "configurations": [

@@ -1,7 +1,7 @@
 {
     "name": "abstractitemmodel",
     "description": "A minimal D application.",
-    "copyright": "Copyright © 2015, Filippo Cucchetto",
+    "copyright": "Copyright © 2016, Filippo Cucchetto",
     "authors": ["Filippo Cucchetto"],
     "targetPath": "bin",
     "copyFiles": ["source/app.qml"],

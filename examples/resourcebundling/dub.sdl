@@ -1,6 +1,6 @@
 name "resourcebundling"
 description "Bundle QML files with the Qt Resource system."
-copyright "Copyright © 2015, Filippo Cucchetto & Moritz Maxeiner"
+copyright "Copyright © 2016, Filippo Cucchetto & Moritz Maxeiner"
 authors "Moritz Maxeiner"
 
 dependency "dqml" path="../../"
