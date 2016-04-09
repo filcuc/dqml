@@ -45,8 +45,6 @@ string GenerateVariantConversionCall(string typeName)
         return ".toFloat()";
     case "double":
         return ".toDouble()";
-    case "QObject":
-        return ".toQObject()";
     case "QVariant":
         return "";
     default:
