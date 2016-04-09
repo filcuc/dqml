@@ -5,7 +5,7 @@ void main()
 {
     try
     {
-        auto app = new QGuiApplication();
+        auto app = new QApplication();
         scope(exit) destroy(app);
 
         auto engine = new QQmlApplicationEngine();
