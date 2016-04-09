@@ -5,62 +5,23 @@ import QtQuick.Window 2.1
 
 ApplicationWindow {
     id: main
-
     width: 400
     height: 60
 
-    title: "Signalling test"
+    Component.onCompleted: visible = true
 
-    signal broadcast(string message)
+    RowLayout {
+        anchors.fill: parent
 
-    Component.onCompleted: {
-        visible = true
-        receiver.register(main)
-    }
-
-    Column {
-        width: parent.width
-
-        Row {
-            width: parent.width
-
-            TextField {
-                id: message
-
-                width: parent.width - 200
-
-                placeholderText: qsTr("Message")
-            }
-
-            Button {
-                width: 200
-
-                text: qsTr("Broadcast message")
-                onClicked: broadcast(message.text)
-            }
+        Item { Layout.fillWidth: true; }
+        Button { text: "Start"; onClicked: sender.start(); }
+        TextField {
+            Layout.fillWidth: true;
+            text: "";
+            placeholderText: "Input your message here.."
+            onEditingFinished: sender.message = text
         }
-
-        Button {
-            id: controller
-
-            onClicked: {
-                if (state == "Silent") state = "Broadcasting"
-                else state = "Silent"
-            }
-
-            state: "Silent"
-            states: [
-                State {
-                    name: "Silent"
-                    PropertyChanges { target: controller; text: qsTr("Start broadcasting numbers") }
-                    StateChangeScript { script: numberBroadcaster.stop() }
-                },
-                State {
-                    name: "Broadcasting"
-                    PropertyChanges { target: controller; text: qsTr("Stop broadcasting numbers") }
-                    StateChangeScript { script: numberBroadcaster.start() }
-                }
-            ]
-        }
+        Button { text: "Stop";  onClicked: sender.stop(); }
+        Item { Layout.fillWidth: true; }
     }
 }
