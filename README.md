@@ -6,17 +6,19 @@ QML binding for the D programming language
 # Supported features
 * Creation of custom QObjects
 * Creation of custom QAbstractListModels
-* Creation of QML instatiable QObjects
+* Creation of QML instantiable QObjects
+* Creation of QML instantiable Singleton
 
 # Requirements
-* [DOtherSide](https://github.com/filcuc/DOtherSide) 0.5.2 or higher
-* [dmd](http://dlang.org/download.html#dmd) 2.071 or higher
+* Install the [DOtherSide](https://github.com/filcuc/DOtherSide) library 0.5.2 or higher
+* Install [dmd](http://dlang.org/download.html#dmd) 2.071 or higher
 
-# Linux: build instructions
+## Buildinstructions
+### Linux
 * Compile and Install DOtherside in your system PATH (i.e. /usr/lib)
 * dub fetch dqml
 
-# Windows: build instructions
+### Windows
 Due to the shitty linker used by DMD (optlink) on windows.
 Using this bindings it's a little bit more complicated on this platform.
 Basically the hard part consists in generating a valid .lib for the DOtherSide.dll.
