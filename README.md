@@ -9,8 +9,8 @@ QML binding for the D programming language
 * Creation of QML instatiable QObjects
 
 # Requirements
-* [DOtherSide](https://github.com/filcuc/DOtherSide) 0.5.0 or higher
-* [dmd](http://dlang.org/download.html#dmd) 2.065 or higher
+* [DOtherSide](https://github.com/filcuc/DOtherSide) 0.5.2 or higher
+* [dmd](http://dlang.org/download.html#dmd) 2.071 or higher
 
 # Linux: build instructions
 * Compile and Install DOtherside in your system PATH (i.e. /usr/lib)

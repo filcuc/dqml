@@ -14,6 +14,9 @@ class Receiver : QObject
 	@QtSlot()
 	public void receive(string message)
 	{
-		writeln("Received \"" ~ message ~ "\"");
+        messageReceived(message);
 	}
+
+    @QtSignal()
+    public void messageReceived(string message);
 }
