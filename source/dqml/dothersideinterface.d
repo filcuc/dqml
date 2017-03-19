@@ -106,9 +106,9 @@ extern(C)
     void  dos_qhash_int_qbytearray_insert(void*, int, immutable(char)*);
     char* dos_qhash_int_qbytearray_value(void*, int);
 
-    // QAbstractListModel
-    void* dos_qabstractlistmodel_qmetaobject();
-    void* dos_qabstractlistmodel_create(void*, void*,
+    // QAbstractItemModel
+    void* dos_qabstractitemmodel_qmetaobject();
+    void* dos_qabstractitemmodel_create(void*, void*,
                                         void function (void*, void*, int, void**),
                                         void function (void*, void*, ref int),
                                         void function (void*, void*, ref int),
@@ -116,15 +116,22 @@ extern(C)
                                         void function (void*, void*, void*, int, ref bool),
                                         void function (void*, void*),
                                         void function (void*, void*, ref int),
-                                        void function (void*, int, int, int, void*));
-    void dos_qabstractlistmodel_beginInsertRows(void* vptr, void* parent, int first, int last);
-    void dos_qabstractlistmodel_endInsertRows(void* vptr);
-    void dos_qabstractlistmodel_beginRemoveRows(void* vptr, void* parent, int first, int last);
-    void dos_qabstractlistmodel_endRemoveRows(void* vptr);
-    void dos_qabstractlistmodel_beginResetModel(void* vptr);
-    void dos_qabstractlistmodel_endResetModel(void* vptr);
-    void dos_qabstractlistmodel_dataChanged(void* vptr, void* topLeft, void* bottomRight, int* rolesPtr, int rolesLength);
-    void dos_qabstractlistmodel_delete(void*);
+                                        void function (void*, int, int, int, void*),
+                                        void function (void*, int, int, void*, void*),
+                                        void function (void*, void*, void*));
+    void dos_qabstractitemmodel_beginInsertRows(void* vptr, void* parent, int first, int last);
+    void dos_qabstractitemmodel_endInsertRows(void* vptr);
+    void dos_qabstractitemmodel_beginRemoveRows(void* vptr, void* parent, int first, int last);
+    void dos_qabstractitemmodel_endRemoveRows(void* vptr);
+    void dos_qabstractitemmodel_beginInsertColumns(void* vptr, void* parent, int first, int last);
+    void dos_qabstractitemmodel_endInsertColumns(void* vptr);
+    void dos_qabstractitemmodel_beginRemoveColumns(void* vptr, void* parent, int first, int last);
+    void dos_qabstractitemmodel_endRemoveColumns(void* vptr);
+    void dos_qabstractitemmodel_beginResetModel(void* vptr);
+    void dos_qabstractitemmodel_endResetModel(void* vptr);
+    void dos_qabstractitemmodel_dataChanged(void* vptr, void* topLeft, void* bottomRight, int* rolesPtr, int rolesLength);
+    void* dos_qabstractitemmodel_createIndex(void* vptr, int row, int column, void* pointer);
+    void dos_qabstractitemmodel_delete(void*);
 
     // QResource
     void dos_qresource_register(immutable(char)* filename);
@@ -133,13 +140,19 @@ extern(C)
     void* dos_qurl_create(immutable(char)*, int);
     void  dos_qurl_delete(void*);
     char* dos_qurl_to_string(void* vptr);
-
+    
     // QMetaObjectFactory
+    struct DosParameterDefinition
+    {
+        immutable(char)* name;
+        int metaType;
+    }
+    
     struct DosSignalDefinition
     {
         immutable(char)* name;
         int parametersCount;
-        int* parametersTypes;
+        DosParameterDefinition* parameters;
     }
 
     struct DosSignalDefinitions
@@ -153,7 +166,7 @@ extern(C)
         immutable(char)* name;
         int returnType;
         int parametersCount;
-        int* parametersTypes;
+        DosParameterDefinition* parameters;
     }
 
     struct DosSlotDefinitions

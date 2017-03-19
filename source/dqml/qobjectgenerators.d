@@ -147,6 +147,18 @@ string GenerateMetaType(string typeName)
     }
 }
 
+string GenerateParameterNamesList(FunctionInfo info)
+{
+    string result = "";
+    for (int i = 0; i < info.parameterNames.length; ++i)
+    {
+        if (i > 0)
+            result ~= ", ";
+        result ~= info.parameterNames[i];
+    }
+    return result;
+}
+
 string GenerateMetaTypesListForSlot(FunctionInfo info)
 {
     string result = GenerateMetaType(info.returnType);
@@ -171,6 +183,7 @@ struct FunctionInfo
 {
     string name;
     string returnType;
+    string[] parameterNames;
     string[] parameterTypes;
     string mangle;
 }
@@ -210,8 +223,11 @@ public static QtInfo GetQtUDA(T)()
                 info.mangle = __traits(getMember, T, member).mangleof;
                 info.name = member;
                 info.returnType = ReturnType!(__traits(getMember, T, member)).stringof;
-
-                foreach (param; ParameterTypeTuple!(__traits(getMember, T, member)))
+                
+                foreach (param; ParameterIdentifierTuple!(__traits(getMember, T, member)))
+                    info.parameterNames ~= param.stringof;
+                
+                foreach (param; Parameters!(__traits(getMember, T, member)))
                     info.parameterTypes ~= param.stringof;
 
                 if (isSlot)
@@ -240,14 +256,18 @@ public static string GenerateMetaObject(string qobjectSuperClassName, QtInfo inf
         "  PropertyDefinition[] properties = [];\n";
 
     foreach(FunctionInfo signal; info.signals) {
-        result ~= format("  signals ~= SignalDefinition(\"%s\",[%s]);\n", signal.name, GenerateMetaTypesListForSignal(signal));
+        string name = signal.name;
+        string parameterNames = GenerateParameterNamesList(signal);
+        string parameterTypes = GenerateMetaTypesListForSignal(signal);
+        result ~= format("  signals ~= SignalDefinition(\"%s\",[%s], [%s]);\n", signal.name, parameterNames, parameterTypes);
     }
 
     foreach(FunctionInfo slot; info.slots) {
         string name = slot.name;
         string returnType = GenerateMetaType(slot.returnType);
-        string parameters = GenerateMetaTypesListForSignal(slot);
-        result ~= format("  slots ~= SlotDefinition(\"%s\", %s, [%s]);\n", slot.name, returnType, parameters);
+        string parameterNames = GenerateParameterNamesList(slot);
+        string parameterTypes = GenerateMetaTypesListForSignal(slot);
+        result ~= format("  slots ~= SlotDefinition(\"%s\", %s, [%s], [%s]);\n", slot.name, returnType, parameterNames, parameterTypes);
     }
 
     foreach(QtPropertyData property; info.properties) {

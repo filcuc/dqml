@@ -18,7 +18,7 @@ ApplicationWindow {
                 + ":" + date.getMinutes()
                 + ":" + date.getSeconds()
                 + ":" + date.getMilliseconds()
-                + " - " + arg0 + "\n"
+                + " - " + message + "\n"
             textArea.append(text)
         }
     }

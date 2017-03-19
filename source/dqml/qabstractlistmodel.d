@@ -9,18 +9,18 @@ import dqml.qmetaobject;
 import std.string;
 import core.memory;
 
-class QAbstractListModel : QObject
+class QAbstractItemModel : QObject
 {
     shared static this()
     {
-        m_staticMetaObject = new QMetaObject(dos_qabstractlistmodel_qmetaobject());
+        m_staticMetaObject = new QMetaObject(dos_qabstractitemmodel_qmetaobject());
     }
 
     this()
     {
         super(true);
         GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
-        this.vptr = dos_qabstractlistmodel_create(cast(void*)this,
+        this.vptr = dos_qabstractitemmodel_create(cast(void*)this,
                                                   metaObject().voidPointer(),
                                                   &staticSlotCallback,
                                                   &rowCountCallback,
@@ -29,7 +29,9 @@ class QAbstractListModel : QObject
                                                   &setDataCallback,
                                                   &roleNamesCallback,
                                                   &flagsCallback,
-                                                  &headerDataCallback);
+                                                  &headerDataCallback,
+                                                  &indexCallback,
+                                                  &parentCallback);
     }
 
     ~this()
@@ -44,7 +46,6 @@ class QAbstractListModel : QObject
     public override QMetaObject metaObject() {
         return m_staticMetaObject;
     }
-
 
     public int rowCount(QModelIndex parentIndex)
     {
@@ -80,46 +81,76 @@ class QAbstractListModel : QObject
     {
         return null;
     }
+    
+    public QModelIndex parent(QModelIndex child)
+    {
+        return new QModelIndex();
+    }
+    
+    public QModelIndex index(int row, int column, QModelIndex parent)
+    {
+        return createIndex(row, column, null);
+    }
 
     protected final void beginInsertRows(QModelIndex parent, int first, int last)
     {
-        dos_qabstractlistmodel_beginInsertRows(this.vptr,
-                                               parent.voidPointer(),
-                                               first,
-                                               last);
+        dos_qabstractitemmodel_beginInsertRows(this.vptr, parent.voidPointer(), first, last);
     }
 
     protected final void endInsertRows()
     {
-        dos_qabstractlistmodel_endInsertRows(this.vptr);
+        dos_qabstractitemmodel_endInsertRows(this.vptr);
     }
 
     protected final void beginRemoveRows(QModelIndex parent, int first, int last)
     {
-        dos_qabstractlistmodel_beginRemoveRows(this.vptr,
-                                               parent.voidPointer(),
-                                               first,
-                                               last);
+        dos_qabstractitemmodel_beginRemoveRows(this.vptr, parent.voidPointer(), first, last);
     }
 
     protected final void endRemoveRows()
     {
-        dos_qabstractlistmodel_endRemoveRows(this.vptr);
+        dos_qabstractitemmodel_endRemoveRows(this.vptr);
+    }
+    
+    protected final void beginInsertColumns(QModelIndex parent, int first, int last)
+    {
+        dos_qabstractitemmodel_beginInsertColumns(this.vptr, parent.voidPointer(), first, last);
+    }
+
+    protected final void endInsertColumns()
+    {
+        dos_qabstractitemmodel_endInsertColumns(this.vptr);
+    }
+
+    protected final void beginRemoveColumns(QModelIndex parent, int first, int last)
+    {
+        dos_qabstractitemmodel_beginRemoveColumns(this.vptr, parent.voidPointer(), first, last);
+    }
+
+    protected final void endRemoveColumns()
+    {
+        dos_qabstractitemmodel_endRemoveColumns(this.vptr);
     }
 
     protected final void beginResetModel()
     {
-        dos_qabstractlistmodel_beginResetModel(this.vptr);
+        dos_qabstractitemmodel_beginResetModel(this.vptr);
     }
 
     protected final void endResetModel()
     {
-        dos_qabstractlistmodel_endResetModel(this.vptr);
+        dos_qabstractitemmodel_endResetModel(this.vptr);
+    }
+    
+    protected final QModelIndex createIndex(int row, int column, void* data)
+    {
+        auto index = dos_qabstractitemmodel_createIndex(this.vptr, row, column, data);
+        return new QModelIndex(index, Ownership.Take);
     }
 
     protected final void dataChanged(QModelIndex topLeft, QModelIndex bottomRight, int[] roles)
     {
-        dos_qabstractlistmodel_dataChanged(this.vptr,
+        dos_qabstractitemmodel_dataChanged(this.vptr,
                                            topLeft.voidPointer(),
                                            bottomRight.voidPointer(),
                                            roles.ptr,
@@ -130,7 +161,7 @@ class QAbstractListModel : QObject
                                                     void* indexPtr,
                                                     ref int result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.rowCount(index);
     }
@@ -139,7 +170,7 @@ class QAbstractListModel : QObject
                                                        void* indexPtr,
                                                        ref int result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.columnCount(index);
     }
@@ -149,7 +180,7 @@ class QAbstractListModel : QObject
                                                 int role,
                                                 void* result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto index = new QModelIndex(indexPtr, Ownership.Clone);
         auto value = model.data(index, role);
         if (value is null)
@@ -163,7 +194,7 @@ class QAbstractListModel : QObject
                                                    int role,
                                                    ref bool result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto index = new QModelIndex(indexPtr, Ownership.Clone);
         auto value = new QVariant(valuePtr, Ownership.Clone);
         result = model.setData(index, value, role);
@@ -172,7 +203,7 @@ class QAbstractListModel : QObject
     private extern (C) static void roleNamesCallback(void* modelPtr,
                                                      void* result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto roles = model.roleNames();
         foreach(int key; roles.keys) {
             dos_qhash_int_qbytearray_insert(result, key, roles[key].toStringz());
@@ -183,7 +214,7 @@ class QAbstractListModel : QObject
                                                  void* indexPtr,
                                                  ref int result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         auto index = new QModelIndex(indexPtr, Ownership.Clone);
         result = model.flags(index);
     }
@@ -194,11 +225,31 @@ class QAbstractListModel : QObject
                                                       int role,
                                                       void* result)
     {
-        auto model = cast(QAbstractListModel)(modelPtr);
+        auto model = cast(QAbstractItemModel)(modelPtr);
         QVariant value = model.headerData(section, orientation, role);
         if (value is null)
             return;
         dos_qvariant_assign(result, value.voidPointer());
+    }
+    
+    private extern (C) static void indexCallback(void* modelPtr,
+                                                 int row,
+                                                 int column,
+                                                 void* parentIndex,
+                                                 void* result)
+    {
+        auto model = cast(QAbstractItemModel)(modelPtr);
+        QModelIndex value = model.index(row, column, new QModelIndex(parentIndex, Ownership.Clone));
+        dos_qmodelindex_assign(result, value.voidPointer());
+    }
+    
+    private extern (C) static void parentCallback(void* modelPtr,
+                                                 void* childIndex,
+                                                 void* result)
+    {
+        auto model = cast(QAbstractItemModel)(modelPtr);
+        QModelIndex value = model.parent(new QModelIndex(childIndex, Ownership.Clone));
+        dos_qmodelindex_assign(result, value.voidPointer());
     }
 
     private static QMetaObject m_staticMetaObject;

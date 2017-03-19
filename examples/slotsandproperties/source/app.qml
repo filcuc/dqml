@@ -16,6 +16,12 @@ ApplicationWindow {
 
         TextField { id: textField }
 
+        Connections {
+            target: contact
+            onNameChanged: console.log("Name Changed", name)
+	    onSurnameChanged: console.log("Surname Changed", surname)
+        }
+
         Button{
             text: "Change Name"
             onClicked: contact.name = textField.text

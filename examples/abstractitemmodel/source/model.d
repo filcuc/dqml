@@ -2,7 +2,7 @@ import dqml;
 import std.stdio;
 
 
-class ListModel : QAbstractListModel
+class ListModel : QAbstractItemModel
 {
     this()
     {
