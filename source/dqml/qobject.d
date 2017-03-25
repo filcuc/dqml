@@ -22,25 +22,16 @@ public class QObject
         m_staticMetaObject = new QMetaObject(dos_qobject_qmetaobject());
     }
 
-    public this(bool disableDosCalls = false)
+    public this()
     {
-        this.disableDosCalls = disableDosCalls;
-        if (!this.disableDosCalls)
-        {
-            GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
-            this.vptr = dos_qobject_create(cast(void*)this,
-                                           metaObject().voidPointer(),
-                                           &staticSlotCallback);
-        }
+        GC.setAttr(cast(void*)this, GC.BlkAttr.NO_MOVE);
+        setVoidPointer(createVoidPointer(), true);
     }
 
     ~this()
     {
-        if (!this.disableDosCalls)
-        {
-            dos_qobject_delete(this.vptr);
-            this.vptr = null;
-        }
+        if (this.vptrOwned)
+            destroyVoidPointer(this.vptr);
     }
 
     public void* voidPointer()
@@ -48,14 +39,10 @@ public class QObject
         return this.vptr;
     }
 
-    public void setVoidPointer(void* vptr)
+    public void setVoidPointer(void* vptr, bool owned)
     {
         this.vptr = vptr;
-    }
-
-    public void setDisableDosCalls(bool value)
-    {
-        this.disableDosCalls = value;
+        this.vptrOwned = owned;
     }
 
     @property public string objectName()
@@ -74,6 +61,13 @@ public class QObject
     public QMetaObject metaObject()
     {
         return staticMetaObject();
+    }
+    
+    protected void* createVoidPointer()
+    {
+        return dos_qobject_create(cast(void*)this,
+                                        metaObject().voidPointer(),
+                                        &staticSlotCallback);
     }
 
     protected void onSlotCalled(QVariant slotName, QVariant[] parameters)
@@ -199,9 +193,14 @@ public class QObject
             return disconnect!slot(sender, signalName, this);
         }
     }
+    
+    private void destroyVoidPointer(void* vptr)
+    {
+        dos_qobject_delete(vptr);
+    }
 
     protected void* vptr;
-    protected bool disableDosCalls;
+    protected bool vptrOwned;
     private static QMetaObject m_staticMetaObject;
 }
 

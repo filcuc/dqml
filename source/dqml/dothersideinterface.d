@@ -119,20 +119,58 @@ extern(C)
                                         void function (void*, int, int, int, void*),
                                         void function (void*, int, int, void*, void*),
                                         void function (void*, void*, void*));
-    void dos_qabstractitemmodel_beginInsertRows(void* vptr, void* parent, int first, int last);
-    void dos_qabstractitemmodel_endInsertRows(void* vptr);
-    void dos_qabstractitemmodel_beginRemoveRows(void* vptr, void* parent, int first, int last);
-    void dos_qabstractitemmodel_endRemoveRows(void* vptr);
-    void dos_qabstractitemmodel_beginInsertColumns(void* vptr, void* parent, int first, int last);
-    void dos_qabstractitemmodel_endInsertColumns(void* vptr);
-    void dos_qabstractitemmodel_beginRemoveColumns(void* vptr, void* parent, int first, int last);
-    void dos_qabstractitemmodel_endRemoveColumns(void* vptr);
-    void dos_qabstractitemmodel_beginResetModel(void* vptr);
-    void dos_qabstractitemmodel_endResetModel(void* vptr);
-    void dos_qabstractitemmodel_dataChanged(void* vptr, void* topLeft, void* bottomRight, int* rolesPtr, int rolesLength);
+    void  dos_qabstractitemmodel_beginInsertRows(void* vptr, void* parent, int first, int last);
+    void  dos_qabstractitemmodel_endInsertRows(void* vptr);
+    void  dos_qabstractitemmodel_beginRemoveRows(void* vptr, void* parent, int first, int last);
+    void  dos_qabstractitemmodel_endRemoveRows(void* vptr);
+    void  dos_qabstractitemmodel_beginInsertColumns(void* vptr, void* parent, int first, int last);
+    void  dos_qabstractitemmodel_endInsertColumns(void* vptr);
+    void  dos_qabstractitemmodel_beginRemoveColumns(void* vptr, void* parent, int first, int last);
+    void  dos_qabstractitemmodel_endRemoveColumns(void* vptr);
+    void  dos_qabstractitemmodel_beginResetModel(void* vptr);
+    void  dos_qabstractitemmodel_endResetModel(void* vptr);
+    void  dos_qabstractitemmodel_dataChanged(void* vptr, void* topLeft, void* bottomRight, int* rolesPtr, int rolesLength);
     void* dos_qabstractitemmodel_createIndex(void* vptr, int row, int column, void* pointer);
-    void dos_qabstractitemmodel_delete(void*);
+    bool  dos_qabstractitemmodel_setData(void* vptr, void* modelIndex, void* valueVariant, int role);
+    void* dos_qabstractitemmodel_roleNames(void* vptr);
+    int   dos_qabstractitemmodel_flags(void *vptr, void* modelIndex);
+    void* dos_qabstractitemmodel_headerData(void *vptr, int section, int orientation, int role);
 
+    // QAbstractListModel
+    void* dos_qabstractlistmodel_qmetaobject();
+    void* dos_qabstractlistmodel_create(void*, void*,
+                                        void function (void*, void*, int, void**),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, void*, int, void*),
+                                        void function (void*, void*, void*, int, ref bool),
+                                        void function (void*, void*),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, int, int, int, void*),
+                                        void function (void*, int, int, void*, void*),
+                                        void function (void*, void*, void*));
+                                        
+    void* dos_qabstractlistmodel_index(void *vptr, int row, int column, void* parentIndex);
+    void* dos_qabstractlistmodel_parent(void *vptr, void* childIndex);
+    int   dos_qabstractlistmodel_columnCount(void *vptr, void* parentIndex);
+    
+    // QAbstractTableModel
+    void* dos_qabstracttablemodel_qmetaobject();
+    void* dos_qabstracttablemodel_create(void*, void*,
+                                        void function (void*, void*, int, void**),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, void*, int, void*),
+                                        void function (void*, void*, void*, int, ref bool),
+                                        void function (void*, void*),
+                                        void function (void*, void*, ref int),
+                                        void function (void*, int, int, int, void*),
+                                        void function (void*, int, int, void*, void*),
+                                        void function (void*, void*, void*));
+                                        
+    void* dos_qabstracttablemodel_index(void *vptr, int row, int column, void* parentIndex);
+    void* dos_qabstracttablemodel_parent(void *vptr, void* childIndex);
+    
     // QResource
     void dos_qresource_register(immutable(char)* filename);
 

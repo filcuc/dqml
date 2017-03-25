@@ -3,7 +3,7 @@ import contact;
 import std.stdio;
 import std.algorithm;
 
-class ContactList : QAbstractItemModel
+class ContactList : QAbstractListModel
 {
     mixin Q_OBJECT;
 

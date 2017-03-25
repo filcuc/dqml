@@ -19,8 +19,7 @@ extern(C) void createSafeObject(T)(int id, void* wrapper, ref void* dObject, ref
     GC.setAttr(cast(void*)qobject, GC.BlkAttr.NO_MOVE);
     dObject = cast(void*)(qobject);
     dosQObject = qobject.voidPointer();
-    qobject.setVoidPointer(wrapper);
-    qobject.setDisableDosCalls(true);
+    qobject.setVoidPointer(wrapper, false);
 }
 
 extern(C) void deleteSafeObject(int id, void* object)
