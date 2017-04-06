@@ -56,21 +56,42 @@ abstract class QAbstractItemModel : QObject
         auto result = dos_qabstractitemmodel_headerData(voidPointer(), section, orientation, role);
         return new QVariant(result, Ownership.Take);
     }
+
+  public bool hasChildren(QModelIndex parent)
+  {
+    return dos_qabstractitemmodel_hasChildren(voidPointer(), parent.voidPointer());
+  }
     
-    protected override void* createVoidPointer()
+  public bool canFetchMore(QModelIndex parent)
+  {
+    return dos_qabstractitemmodel_canFetchMore(voidPointer(), parent.voidPointer());
+  }
+
+  public void fetchMore(QModelIndex parent)
+  {
+    dos_qabstractitemmodel_fetchMore(voidPointer(), parent.voidPointer());
+  }
+
+  protected override void* createVoidPointer()
     {
+        DosQAbstractItemModelCallbacks callbacks;
+        callbacks.rowCount = &rowCountCallback;
+	callbacks.columnCount = &columnCountCallback;
+	callbacks.data = &dataCallback;
+	callbacks.setData = &setDataCallback;
+	callbacks.headerData = &headerDataCallback;
+	callbacks.roleNames = &roleNamesCallback;
+	callbacks.flags = &flagsCallback;
+	callbacks.index = &indexCallback;
+	callbacks.parent = &parentCallback;
+	callbacks.hasChildren = &hasChildrenCallback;
+	callbacks.canFetchMore = &canFetchMoreCallback;
+	callbacks.fetchMore = &fetchMoreCallback;
+
         return dos_qabstractitemmodel_create(cast(void*)this,
                                              metaObject().voidPointer(),
                                              &staticSlotCallback,
-                                             &rowCountCallback,
-                                             &columnCountCallback,
-                                             &dataCallback,
-                                             &setDataCallback,
-                                             &roleNamesCallback,
-                                             &flagsCallback,
-                                             &headerDataCallback,
-                                             &indexCallback,
-                                             &parentCallback);
+					     callbacks);
     }
 
     protected final void beginInsertRows(QModelIndex parent, int first, int last)
@@ -231,6 +252,30 @@ abstract class QAbstractItemModel : QObject
         auto model = cast(QAbstractItemModel)(modelPtr);
         QModelIndex value = model.parent(new QModelIndex(childIndex, Ownership.Clone));
         dos_qmodelindex_assign(result, value.voidPointer());
+    }
+
+    protected extern (C) static void hasChildrenCallback(void* modelPtr,
+							 void* parentIndex,
+							 ref bool result)
+    {
+        auto model = cast(QAbstractItemModel)(modelPtr);
+	result = model.hasChildren(new QModelIndex(parentIndex, Ownership.Clone));
+    }
+
+    protected extern (C) static void canFetchMoreCallback(void* modelPtr,
+							  void* parentIndex,
+							  ref bool result)
+    {
+        auto model = cast(QAbstractItemModel)(modelPtr);
+	result = model.canFetchMore(new QModelIndex(parentIndex, Ownership.Clone));
+    }
+
+    protected extern (C) static void fetchMoreCallback(void* modelPtr,
+						       void* parentIndex)
+					
+    {
+        auto model = cast(QAbstractItemModel)(modelPtr);
+	model.fetchMore(new QModelIndex(parentIndex, Ownership.Clone));
     }
 
     private static QMetaObject m_staticMetaObject;

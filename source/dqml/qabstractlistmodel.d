@@ -43,18 +43,24 @@ abstract class QAbstractListModel : QAbstractItemModel
     
     protected override void* createVoidPointer()
     {
+        DosQAbstractItemModelCallbacks callbacks;
+        callbacks.rowCount = &rowCountCallback;
+	callbacks.columnCount = &columnCountCallback;
+	callbacks.data = &dataCallback;
+	callbacks.setData = &setDataCallback;
+	callbacks.headerData = &headerDataCallback;
+	callbacks.roleNames = &roleNamesCallback;
+	callbacks.flags = &flagsCallback;
+	callbacks.index = &indexCallback;
+	callbacks.parent = &parentCallback;
+	callbacks.hasChildren = &hasChildrenCallback;
+	callbacks.canFetchMore = &canFetchMoreCallback;
+	callbacks.fetchMore = &fetchMoreCallback;
+
         return this.vptr = dos_qabstractlistmodel_create(cast(void*)this,
                                                          metaObject().voidPointer(),
                                                          &staticSlotCallback,
-                                                         &rowCountCallback,
-                                                         &columnCountCallback,
-                                                         &dataCallback,
-                                                         &setDataCallback,
-                                                         &roleNamesCallback,
-                                                         &flagsCallback,
-                                                         &headerDataCallback,
-                                                         &indexCallback,
-                                                         &parentCallback);
+							 callbacks);
     }
     
     private static QMetaObject m_staticMetaObject;
