@@ -19,6 +19,6 @@ void main()
 
         app.exec();
     }
-    catch
+    catch(Throwable)
     {}
 }

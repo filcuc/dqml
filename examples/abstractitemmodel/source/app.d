@@ -21,6 +21,6 @@ void main()
         engine.load("app.qml");
         app.exec();
     }
-    catch
+    catch(Throwable)
     {}
 }

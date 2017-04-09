@@ -1,4 +1,4 @@
-module dqml.qabstractlistmodel;
+module dqml.qabstracttablemodel;
 
 import dqml.dothersideinterface;
 import dqml.global;
@@ -7,11 +7,11 @@ import dqml.qmetaobject;
 import dqml.qmodelindex;
 import core.memory;
 
-abstract class QAbstractListModel : QAbstractItemModel
+abstract class QAbstractTableModel : QAbstractItemModel
 {
     shared static this()
     {
-        m_staticMetaObject = new QMetaObject(dos_qabstractlistmodel_qmetaobject());
+        m_staticMetaObject = new QMetaObject(dos_qabstracttablemodel_qmetaobject());
     }
     
     public static QMetaObject staticMetaObject() 
@@ -24,20 +24,15 @@ abstract class QAbstractListModel : QAbstractItemModel
         return m_staticMetaObject;
     }
     
-    public override int columnCount(QModelIndex parent)
-    {
-        return dos_qabstractlistmodel_columnCount(voidPointer(), parent.voidPointer());
-    }
-    
     public override QModelIndex index(int row, int column, QModelIndex parent)
     {
-        auto result = dos_qabstractlistmodel_index(voidPointer(), row, column, parent.voidPointer());
+        auto result = dos_qabstracttablemodel_index(voidPointer(), row, column, parent.voidPointer());
         return new QModelIndex(result, Ownership.Take);
     }
     
     public override QModelIndex parent(QModelIndex child)
     {
-        auto result = dos_qabstractlistmodel_parent(voidPointer(), child.voidPointer());
+        auto result = dos_qabstracttablemodel_parent(voidPointer(), child.voidPointer());
         return new QModelIndex(result, Ownership.Take);
     }
     
@@ -57,10 +52,10 @@ abstract class QAbstractListModel : QAbstractItemModel
 	callbacks.canFetchMore = &canFetchMoreCallback;
 	callbacks.fetchMore = &fetchMoreCallback;
 
-        return this.vptr = dos_qabstractlistmodel_create(cast(void*)this,
-                                                         metaObject().voidPointer(),
-                                                         &staticSlotCallback,
-							 callbacks);
+        return dos_qabstracttablemodel_create(cast(void*)this,
+                                              metaObject().voidPointer(),
+                                              &staticSlotCallback,
+					      callbacks);
     }
     
     private static QMetaObject m_staticMetaObject;

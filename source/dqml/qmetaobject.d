@@ -3,31 +3,53 @@ module dqml.qmetaobject;
 import dqml.dothersideinterface;
 import dqml.qmetatype;
 import std.string;
+import core.stdc.stdlib;
+
+T* mallocArray(T)(int size) 
+{
+    if (size == 0)
+        return null;
+    return cast(T*) malloc(T.sizeof * size);
+}
+
+public struct ParameterDefinition
+{
+    this(string name, QMetaType metaType)
+    {
+        this.name = name;
+        this.metaType = metaType;
+    }
+    
+    string name;
+    QMetaType metaType;
+}
 
 public struct SignalDefinition
 {
-    this(string name, QMetaType[] types)
+    this(string name, string[] parametersNames, QMetaType[] parametersTypes)
     {
         this.name = name;
-        this.parametersTypes = types;
+        for (int i = 0; i < parametersNames.length; ++i)
+            parameters ~= ParameterDefinition(parametersNames[i], parametersTypes[i]);
     }
 
     string name;
-    QMetaType[] parametersTypes;
+    ParameterDefinition[] parameters;
 }
 
 public struct SlotDefinition
 {
-    this(string name, QMetaType returnType, QMetaType[] parametersTypes)
+    this(string name, QMetaType returnType, string[] parametersNames, QMetaType[] parametersTypes)
     {
         this.name = name;
         this.returnType = returnType;
-        this.parametersTypes = parametersTypes;
+        for (int i = 0; i < parametersNames.length; ++i)
+            parameters ~= ParameterDefinition(parametersNames[i], parametersTypes[i]);
     }
 
     string name;
     QMetaType returnType;
-    QMetaType[] parametersTypes;
+    ParameterDefinition[] parameters;
 }
 
 public struct PropertyDefinition
@@ -65,21 +87,15 @@ public class QMetaObject
         this.slotDefinitions = slotDefinitions;
         this.propertyDefinitions = propertyDefinitions;
 
-        auto dosSignalDefinitionsArray = convert(signalDefinitions);
-        DosSignalDefinitions dosSignalDefinitions;
-        dosSignalDefinitions.count = cast(int) dosSignalDefinitionsArray.length;
-        dosSignalDefinitions.definitions = dosSignalDefinitionsArray.ptr;
-
-        auto dosSlotDefinitionsArray = convert(slotDefinitions);
-        DosSlotDefinitions dosSlotDefinitions;
-        dosSlotDefinitions.count = cast(int) dosSlotDefinitionsArray.length;
-        dosSlotDefinitions.definitions = dosSlotDefinitionsArray.ptr;
-
-        auto propertyDefinitionsArray = convert(propertyDefinitions);
-        DosPropertyDefinitions dosPropertyDefinitions;
-        dosPropertyDefinitions.count = cast(int) propertyDefinitionsArray.length;
-        dosPropertyDefinitions.definitions = propertyDefinitionsArray.ptr;
-
+        auto dosSignalDefinitions = mallocDefinitions(signalDefinitions);
+        scope(exit) freeDefinitions(dosSignalDefinitions);
+        
+        auto dosSlotDefinitions = mallocDefinitions(slotDefinitions);
+        scope(exit) freeDefinitions(dosSlotDefinitions);
+        
+        auto dosPropertyDefinitions = mallocDefinitions(propertyDefinitions);
+        scope(exit) freeDefinitions(dosPropertyDefinitions);
+        
         this.vptr = dos_qmetaobject_create(superClass.vptr,
                                            className.toStringz(),
                                            dosSignalDefinitions,
@@ -96,51 +112,97 @@ public class QMetaObject
     @property SlotDefinition[] slots() { return slotDefinitions; }
     @property PropertyDefinition[] properties() { return propertyDefinitions; }
 
-    private DosSignalDefinition[] convert(SignalDefinition[] definitions)
-    {
-        DosSignalDefinition[] result;
-        foreach (SignalDefinition definition; definitions) {
-            DosSignalDefinition dosDefinition;
-            dosDefinition.name = definition.name.toStringz();
-            dosDefinition.parametersCount = cast(int)definition.parametersTypes.length;
-            dosDefinition.parametersTypes = cast(int*)definition.parametersTypes.ptr;
-            result ~= dosDefinition;
-        }
-        return result;
-    }
-
-    private DosSlotDefinition[] convert(SlotDefinition[] definitions)
-    {
-        DosSlotDefinition[] result;
-        foreach (SlotDefinition definition; definitions) {
-            DosSlotDefinition dosDefinition;
-            dosDefinition.name = definition.name.toStringz();
-            dosDefinition.returnType = definition.returnType;
-            dosDefinition.parametersCount = cast(int)definition.parametersTypes.length;
-            dosDefinition.parametersTypes = cast(int*)definition.parametersTypes.ptr;
-            result ~= dosDefinition;
-        }
-        return result;
-    }
-
-    private DosPropertyDefinition[] convert(PropertyDefinition[] definitions)
-    {
-        DosPropertyDefinition[] result;
-        foreach (PropertyDefinition definition; definitions) {
-            DosPropertyDefinition dosDefinition;
-            dosDefinition.name = definition.name.toStringz();
-            dosDefinition.type = definition.type;
-            dosDefinition.readSlot = definition.readSlot.toStringz();
-            dosDefinition.writeSlot = definition.writeSlot.toStringz();
-            dosDefinition.notifySignal = definition.notifySignal.toStringz();
-            result ~= dosDefinition;
-        }
-        return result;
-    }
-
     public void* voidPointer()
     {
         return this.vptr;
+    }
+    
+    private DosSignalDefinitions mallocDefinitions(SignalDefinition[] definitions)
+    {
+        DosSignalDefinitions result;
+        result.count = cast(int)definitions.length;
+        result.definitions = mallocArray!DosSignalDefinition(result.count);
+        
+        for (int i = 0; i < result.count; ++i)
+        {
+            SignalDefinition signalProto = definitions[i];
+            DosSignalDefinition* signalDef = result.definitions + i;
+            signalDef.name = toStringz(signalProto.name);
+            signalDef.parametersCount = cast(int)signalProto.parameters.length;
+            signalDef.parameters = mallocArray!DosParameterDefinition(signalDef.parametersCount);
+            for (int j = 0; j < signalDef.parametersCount; ++j)
+            {
+                ParameterDefinition parameterProto = signalProto.parameters[j];
+                DosParameterDefinition* parameterDef = signalDef.parameters + j;
+                parameterDef.name = toStringz(parameterProto.name);
+                parameterDef.metaType = parameterProto.metaType;
+            }
+        }
+        
+        return result;
+    }
+    
+    private void freeDefinitions(DosSignalDefinitions definitions) 
+    {
+        for (int i = 0; i < definitions.count; ++i)
+            free((definitions.definitions + i).parameters);
+        free(definitions.definitions);
+    }
+    
+    private DosSlotDefinitions mallocDefinitions(SlotDefinition[] definitions)
+    {
+        DosSlotDefinitions result;
+        result.count = cast(int)definitions.length;
+        result.definitions = mallocArray!DosSlotDefinition(result.count);
+        
+        for (int i = 0; i < result.count; ++i)
+        {
+            SlotDefinition slotProto = definitions[i];
+            DosSlotDefinition* slotDef = result.definitions + i;
+            slotDef.name = toStringz(slotProto.name);
+            slotDef.returnType = slotProto.returnType;
+            slotDef.parametersCount = cast(int)slotProto.parameters.length;
+            slotDef.parameters = mallocArray!DosParameterDefinition(slotDef.parametersCount);
+            for (int j = 0; j < slotDef.parametersCount; ++j)
+            {
+                ParameterDefinition parameterProto = slotProto.parameters[j];
+                DosParameterDefinition* parameterDef = slotDef.parameters + j;
+                parameterDef.name = toStringz(parameterProto.name);
+                parameterDef.metaType = parameterProto.metaType;
+            }
+        }
+        
+        return result;
+    }
+    
+    private void freeDefinitions(DosSlotDefinitions definitions)
+    {
+        for (int i = 0; i < definitions.count; ++i)
+            free((definitions.definitions + i).parameters);
+        free(definitions.definitions);
+    }
+    
+    private DosPropertyDefinitions mallocDefinitions(PropertyDefinition[] definitions)
+    {
+        DosPropertyDefinitions result;
+        result.count = cast(int)definitions.length;
+        result.definitions = mallocArray!DosPropertyDefinition(result.count);
+        for (int i = 0; i < result.count; ++i)
+        {
+            PropertyDefinition proto = definitions[i];
+            DosPropertyDefinition* def = result.definitions + i;
+            def.name = toStringz(proto.name);
+            def.type = proto.type;
+            def.readSlot = toStringz(proto.readSlot);
+            def.writeSlot = toStringz(proto.writeSlot);
+            def.notifySignal = toStringz(proto.notifySignal);
+        }
+        return result;
+    }
+    
+    private void freeDefinitions(DosPropertyDefinitions definitions)
+    {
+        free(definitions.definitions);
     }
 
     private void* vptr;
