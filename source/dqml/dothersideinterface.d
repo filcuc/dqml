@@ -99,6 +99,7 @@ extern(C)
     void* dos_qmodelindex_child(void* index, int r, int c);
     void* dos_qmodelindex_sibling(void* index, int r, int c);
     void  dos_qmodelindex_assign(void* leftSide, void* rightSide);
+    void* dos_qmodelindex_internalPointer(void* index);
 
     // QHashIntByteArray
     void* dos_qhash_int_qbytearray_create();

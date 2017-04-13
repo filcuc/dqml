@@ -65,6 +65,11 @@ class QModelIndex
         void* sibling = dos_qmodelindex_sibling(this.vptr, row, column);
         return new QModelIndex(sibling, Ownership.Take);
     }
+    
+    public void* internalPointer()
+    {
+        return dos_qmodelindex_internalPointer(this.vptr);
+    }
 
     private void* vptr = null;
 }
