@@ -146,6 +146,7 @@ extern(C)
     int   dos_qabstractitemmodel_flags(void *vptr, void* modelIndex);
     void* dos_qabstractitemmodel_headerData(void *vptr, int section, int orientation, int role);
     bool  dos_qabstractitemmodel_hasChildren(void *vptr, void* parent);
+    bool  dos_qabstractitemmodel_hasIndex(void *vptr, int row, int column, void* parent);
     bool  dos_qabstractitemmodel_canFetchMore(void *vptr, void* parent);
     void  dos_qabstractitemmodel_fetchMore(void *vptr, void* parent);
 

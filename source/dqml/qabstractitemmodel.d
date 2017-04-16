@@ -61,6 +61,11 @@ abstract class QAbstractItemModel : QObject
   {
     return dos_qabstractitemmodel_hasChildren(voidPointer(), parent.voidPointer());
   }
+
+  public bool hasIndex(int row, int column, QModelIndex parent)
+  {
+    return dos_qabstractitemmodel_hasIndex(voidPointer(), row, column, parent.voidPointer());
+  }
     
   public bool canFetchMore(QModelIndex parent)
   {
