@@ -1,0 +1,11 @@
+{
+    "name": "simpletreeview",
+    "description": "Example of TreeView using qml.",
+    "copyright": "Copyright © 2016-2017, Filippo Cucchetto, Alexandr Druzhinin",
+    "authors": ["Filippo Cucchetto, Alexandr Druzhinin"],
+    "targetPath": "bin",
+    "copyFiles": ["source/app.qml"],
+    "dependencies": {
+        "dqml":{"version":"~master", "path":"../../"}
+    }
+}
