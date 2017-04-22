@@ -5,29 +5,29 @@ import QtQuick.Window 2.1
 import CustomModule 1.0
 
 ApplicationWindow {
-    visible: true
-    title: qsTr("Simple Tree View")
+	visible: true
+	title: qsTr("Simple Tree View")
 
-    TreeView {
-        anchors.fill: parent
-        model: theModel
-        itemDelegate: Item {
-            Text {
-                anchors.fill: parent
-                color: styleData.textColor
-                elide: styleData.elideMode
-                text: styleData.value.indentation + " : " + styleData.value.text
-            }
-        }
+	TreeView {
+		anchors.fill: parent
+		model: theModel
+		itemDelegate: Item {
+			Text {
+				anchors.fill: parent
+				color: styleData.textColor
+				elide: styleData.elideMode
+				text: styleData.value.indentation + " : " + styleData.value.text
+			}
+		}
 
-        TableViewColumn {
-            role: "title"
-            title: "Title"
-        }
+		TableViewColumn {
+			role: "title"
+			title: "Title"
+		}
 
-        TableViewColumn {
-            role: "summary"
-            title: "Summary"
-        }
-    }
+		TableViewColumn {
+			role: "summary"
+			title: "Summary"
+		}
+	}
 }

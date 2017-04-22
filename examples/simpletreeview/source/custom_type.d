@@ -6,60 +6,60 @@ import dqml;
 @QtProperty!int("indentation", "indentation", "setIndentation", "indentationChanged")
 class CustomType : QObject
 {
-    mixin Q_OBJECT;
+	mixin Q_OBJECT;
 
 public:
-    this(QObject parent = null)
-    {
-    	super();
-    	_indentation = 0;
-    }
-
-    this(CustomType other)
+	this(QObject parent = null)
 	{
-	    _text = other._text;
-	    _indentation = other._indentation;
+		super();
+		_indentation = 0;
+	}
+
+	this(CustomType other)
+	{
+		_text        = other._text;
+		_indentation = other._indentation;
 	}
 
 	@QtSlot()
-    string text()
+	string text()
 	{
-	    return _text;
-	}
-
-    @QtSlot()
-    void setText(string value)
-	{
-	    if (_text != value)
-        {
-            _text = value;
-            textChanged(text);
-        }
-	}
-
-    @QtSignal()
-    public void textChanged(string);
-
-    @QtSlot()
-    int indentation()
-	{
-	    return _indentation;
+		return _text;
 	}
 
 	@QtSlot()
-    void setIndentation(int value)
+	void setText(string value)
+	{
+		if (_text != value)
+		{
+			_text = value;
+			textChanged(text);
+		}
+	}
+
+	@QtSignal()
+	public void textChanged(string);
+
+	@QtSlot()
+	int indentation()
+	{
+		return _indentation;
+	}
+
+	@QtSlot()
+	void setIndentation(int value)
 	{
 		if (_indentation != value)
-        {
-            _indentation = value;
-            indentationChanged(indentation);
-        }
+		{
+			_indentation = value;
+			indentationChanged(indentation);
+		}
 	}
 
-    @QtSignal()
-    public void indentationChanged(int);
+	@QtSignal()
+	public void indentationChanged(int);
 
 private:
-    string _text;
-    int _indentation;
+	string _text;
+	int    _indentation;
 }

@@ -4,7 +4,7 @@
     "copyright": "Copyright © 2016-2017, Filippo Cucchetto, Alexandr Druzhinin",
     "authors": ["Filippo Cucchetto, Alexandr Druzhinin"],
     "targetPath": "bin",
-    "copyFiles": ["source/app.qml"],
+    "copyFiles": ["source/app.qml", "default.txt"],
     "dependencies": {
         "dqml":{"version":"~master", "path":"../../"}
     }
