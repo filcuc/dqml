@@ -10,7 +10,7 @@ QML binding for the D programming language
 * Creation of QML instantiable Singleton
 
 # Requirements
-* Install the [DOtherSide](https://github.com/filcuc/DOtherSide) library 0.6.0 or higher
+* Install the [DOtherSide](https://github.com/filcuc/DOtherSide) library 0.6.3 or higher
 * Install [dmd](http://dlang.org/download.html#dmd) 2.071 or higher
 
 ## Buildinstructions
