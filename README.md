@@ -13,7 +13,7 @@ QML binding for the D programming language
 * Install the [DOtherSide](https://github.com/filcuc/DOtherSide) library 0.6.3 or higher
 * Install [dmd](http://dlang.org/download.html#dmd) 2.071 or higher
 
-## Buildinstructions
+## Build instructions
 ### Linux
 * Compile and Install DOtherside in your system PATH (i.e. /usr/lib)
 * dub fetch dqml
