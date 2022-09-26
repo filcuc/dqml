@@ -1,5 +1,5 @@
 import QtQuick 2.2
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.1
 
@@ -15,6 +15,6 @@ ApplicationWindow {
         SpinBox { value: qVar1}
         TextField { text: qVar2}
         CheckBox { checked: qVar3}
-        SpinBox { value: qVar4; decimals: 1 }
+        SpinBox { value: qVar4 }
     }
 }
