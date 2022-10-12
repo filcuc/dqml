@@ -106,7 +106,7 @@ public class QObject
         void*[] array = null;
         if (length > 0) {
             array = new void*[length];
-            foreach (int i, QVariant v; arguments)
+            foreach (i, QVariant v; arguments)
                 array[i] = v.voidPointer();
         }
         dos_qobject_signal_emit(this.vptr,
@@ -135,7 +135,7 @@ public class QObject
                                   string method,
                                   ConnectionType type = ConnectionType.Auto)
     {
-        return dos_qobject_signal_connect(sender.voidPointer,
+        return dos_qobject_connect_lambda_static(sender.voidPointer,
                                           signal.toStringz,
                                           receiver.voidPointer,
                                           method.toStringz,
@@ -148,7 +148,7 @@ public class QObject
                                      QObject receiver,
                                      string method)
     {
-        return dos_qobject_signal_disconnect(sender.voidPointer,
+        return dos_qobject_disconnect_static(sender.voidPointer,
                                              signal.toStringz,
                                              receiver.voidPointer,
                                              method.toStringz);

@@ -75,12 +75,12 @@ extern(C)
     void  dos_qobject_signal_emit(void*, immutable(char)* name,
                                  int parametersCount,
                                  void** parameters);
-    bool  dos_qobject_signal_connect(void*,
+    bool  dos_qobject_connect_lambda_static(void*,
                                     immutable(char)*,
                                     void*,
                                     immutable(char)*,
                                     int);
-    bool  dos_qobject_signal_disconnect(void*,
+    bool  dos_qobject_disconnect_static(void*,
                                        immutable(char)*,
                                        void*,
                                        immutable(char)*);
